@@ -40,7 +40,7 @@ max_grad_norm: 10.
 # I.e. the first that is reached.
 number_of_epochs: 42
 optimizer_step_limit: 400000
-grad_accumula tion_factor: 2
+grad_accumulation_factor: 2
 
 seconds_per_batch: 100 # Fits in a 11GB GPUs
 train_num_buckets: 50
