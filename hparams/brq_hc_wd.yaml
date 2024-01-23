@@ -7,11 +7,11 @@
 # ############################################################################
 # Seed needs to be set at top of yaml, before objects with parameters are made
 
-seed: 2000
+seed: 2001
 __set_seed: !apply:torch.manual_seed [!ref <seed>]
 
 project_name: alt-attention
-experiment_name: hyper-conformer-test
+experiment_name: hc_adamw
 data_folder: /gpfsscratch/rech/nkp/uaj64gk/corpus/LibriSpeech/
 output_folder: !ref results/best_hyperconformer/<seed>
 output_wer_folder: !ref <output_folder>/
@@ -33,8 +33,8 @@ skip_prep: True
 avoid_if_longer_than: 60.0
 avoid_if_shorter_than: 2.0
 log_interval: 200 # Logging every N optimizer steps
-precision: fp32
-max_grad_norm: 1.
+precision: fp16
+max_grad_norm: 10.
 
 # Training parameters
 # To make Transformers converge, the global bath size should be large enough.
@@ -59,6 +59,7 @@ test_dataloader_options:
 
 # Training parameters (based on Section 4.1.1 of Best-RQ paper)
 lr: 0.0008
+weight_decay: 0.01
 warmup: 25000
 
 # Feature parameters
@@ -167,10 +168,10 @@ normalize: !new:speechbrain.processing.features.InputNormalization
 ############################## running ################################
 
 # define two optimizers here for two-stage training
-optimizer: !name:torch.optim.Adam
+optimizer: !name:torch.optim.AdamW
     lr: !ref <lr>
     betas: (0.9, 0.98)
-    eps: 0.000000001
+    weight_decay: !ref <weight_decay>
 
 noam_annealing: !new:speechbrain.nnet.schedulers.NoamScheduler
     lr_initial: !ref <lr>

@@ -26,7 +26,7 @@ from speechbrain.utils.distributed import run_on_main
 from speechbrain.dataio.dataloader import SaveableDataLoader
 from speechbrain.dataio.sampler import DynamicBatchSampler
 from mask import brq_mask_collate_fn
-# import wandb
+import wandb
 
 
 logger = logging.getLogger(__name__)
@@ -122,31 +122,29 @@ class BestRQBrain(sb.core.Brain):
             accuracy = correct_predictions.sum().item() / len(correct_predictions)
             self.acc_metric.append(accuracy)
         loss = F.cross_entropy(pred, targets)
-        print('========= loss =========')
-        print(loss)
 
-        # if self.step % 100 == 0 and stage == sb.Stage.TRAIN:
-        #     param_norms =[
-        #         param.detach().flatten()
-        #         for param in self.modules.parameters()
-        #         if param is not None
-        #     ]
-        #     param_norms = torch.cat(param_norms).norm()
+        if self.step % 100 == 0 and stage == sb.Stage.TRAIN:
+            param_norms =[
+                param.detach().flatten()
+                for param in self.modules.parameters()
+                if param is not None
+            ]
+            param_norms = torch.cat(param_norms).norm()
 
-        #     grads = [
-        #         param.grad.detach().flatten()
-        #         for param in self.modules.parameters()
-        #         if param.grad is not None
-        #     ]
-        #     cb_usage = targets.unique().shape[0] / self.hparams.cb_vocab
-        #     norm = torch.cat(grads).norm()
-        #     wandb.log({
-        #         'loss': loss,
-        #         'param_norm':param_norms,
-        #         'grad_norm':norm,
-        #         'cb_usage':cb_usage,
-        #         **self.scaler.state_dict()
-        #     })
+            grads = [
+                param.grad.detach().flatten()
+                for param in self.modules.parameters()
+                if param.grad is not None
+            ]
+            cb_usage = targets.unique().shape[0] / self.hparams.cb_vocab
+            norm = torch.cat(grads).norm()
+            wandb.log({
+                'loss': loss,
+                'param_norm':param_norms,
+                'grad_norm':norm,
+                'cb_usage':cb_usage,
+                **self.scaler.state_dict()
+            })
   
         return loss
 
@@ -349,33 +347,33 @@ def dataio_prepare(hparams):
         pin_memory=True,
     )
 
-    # wandb.init(
-    #     # Set the project where this run will be logged
-    #     project=hparams["project_name"],
-    #     # We pass a run name (otherwise it’ll be randomly assigned, like sunshine-lollypop-10)
-    #     # name=f"exp_0", 
-    #     name=hparams["experiment_name"],
-    #     # Track hyperparameters and run metadata
-    #     config={
-    #     "learning_rate": hparams["lr"],
-    #     "architecture": "CNN-HyperBranchformer",
-    #     "dataset": "Libri",
-    #     "number_of_epochs": hparams["number_of_epochs"],
-    #     "precision": hparams["precision"],
-    #     "max_grad_norm": hparams["max_grad_norm"],
-    #     "grad_accumulation_factor": hparams["grad_accumulation_factor"],
-    #     "seconds_per_batch": hparams["seconds_per_batch"], # Fits in a 32GB GPUs (V100)
-    #     "train_num_buckets": hparams["train_num_buckets"],
-    #     "d_model": hparams["d_model"],
-    #     "d_ffn": hparams["d_ffn"],
-    #     "nhead": hparams["nhead"],
-    #     "num_encoder_layers": hparams["num_encoder_layers"],
-    #     "seed": hparams["seed"],
-    #     "cb_vocab": hparams["cb_vocab"],
-    #     "p_input": hparams["p_input"],
-    #     "cb_dim": hparams["cb_dim"],
-    #     "mask_prob": hparams["mask_prob"],
-    # })
+    wandb.init(
+        # Set the project where this run will be logged
+        project=hparams["project_name"],
+        # We pass a run name (otherwise it’ll be randomly assigned, like sunshine-lollypop-10)
+        # name=f"exp_0", 
+        name=hparams["experiment_name"],
+        # Track hyperparameters and run metadata
+        config={
+        "learning_rate": hparams["lr"],
+        "architecture": "CNN-HyperBranchformer",
+        "dataset": "Libri",
+        "number_of_epochs": hparams["number_of_epochs"],
+        "precision": hparams["precision"],
+        "max_grad_norm": hparams["max_grad_norm"],
+        "grad_accumulation_factor": hparams["grad_accumulation_factor"],
+        "seconds_per_batch": hparams["seconds_per_batch"], # Fits in a 32GB GPUs (V100)
+        "train_num_buckets": hparams["train_num_buckets"],
+        "d_model": hparams["d_model"],
+        "d_ffn": hparams["d_ffn"],
+        "nhead": hparams["nhead"],
+        "num_encoder_layers": hparams["num_encoder_layers"],
+        "seed": hparams["seed"],
+        "cb_vocab": hparams["cb_vocab"],
+        "p_input": hparams["p_input"],
+        "cb_dim": hparams["cb_dim"],
+        "mask_prob": hparams["mask_prob"],
+    })
 
     return train_data, valid_loader, train_loader_kwargs
 
@@ -429,7 +427,7 @@ def main():
         train_loader_kwargs=train_loader_kwargs,
         progressbar=True,
     )
-    # wandb.finish()
+    wandb.finish()
 
 
 if __name__ == "__main__":
