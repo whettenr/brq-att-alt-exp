@@ -12,6 +12,9 @@ __set_seed: !apply:torch.manual_seed [!ref <seed>]
 
 project_name: alt-attention
 experiment_name: hc_adamw
+architecture: brq-hyperconformer
+wandb_offline: False
+
 data_folder: /gpfsscratch/rech/nkp/uaj64gk/corpus/LibriSpeech/
 output_folder: !ref results/best_hyperconformer/<seed>
 output_wer_folder: !ref <output_folder>/

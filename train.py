@@ -348,7 +348,7 @@ def dataio_prepare(hparams):
         pin_memory=True,
     )
     
-    if hparams['wandb_offline']:
+    if 'wandb_offline' in hparams and hparams['wandb_offline']:
         os.environ["WANDB_MODE"] = "offline"
     
     wandb.init(
