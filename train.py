@@ -10,6 +10,7 @@ Authors
     * Ryan Whetten 2023
 """
 
+import os
 import logging
 import sys
 import time
@@ -346,7 +347,10 @@ def dataio_prepare(hparams):
         batch_size=hparams["test_dataloader_options"]["batch_size"],
         pin_memory=True,
     )
-
+    
+    if hparams['wandb_offline']:
+        os.environ["WANDB_MODE"] = "offline"
+    
     wandb.init(
         # Set the project where this run will be logged
         project=hparams["project_name"],
@@ -356,7 +360,7 @@ def dataio_prepare(hparams):
         # Track hyperparameters and run metadata
         config={
         "learning_rate": hparams["lr"],
-        "architecture": "CNN-HyperBranchformer",
+        "architecture": hparams["architecture"],
         "dataset": "Libri",
         "number_of_epochs": hparams["number_of_epochs"],
         "precision": hparams["precision"],
