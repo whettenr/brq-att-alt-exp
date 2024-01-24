@@ -12,7 +12,7 @@ __set_seed: !apply:torch.manual_seed [!ref <seed>]
 project_name: alt-attention
 experiment_name: base_fp16
 architecture: brq-conformer
-offline: True
+wandb_offline: True
 
 data_folder: /gpfsdswork/dataset/LibriSpeechAsrCorpus
 output_folder: !ref results/bestrq/<seed>
