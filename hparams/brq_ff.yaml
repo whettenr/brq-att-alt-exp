@@ -13,7 +13,7 @@ __set_seed: !apply:torch.manual_seed [!ref <seed>]
 project_name: alt-attention
 experiment_name: ff_adamw
 architecture: brq-fastformer
-wandb_offline: False
+wandb_offline: True
 
 data_folder: /gpfsscratch/rech/nkp/uaj64gk/corpus/LibriSpeech/
 output_folder: !ref results/best_fastconformer/<seed>
