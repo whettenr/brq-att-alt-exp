@@ -15,4 +15,4 @@ conda activate aa
 
 cd /gpfswork/rech/nkp/uaj64gk/attention_alt/brq-att-alt-exp
 
-python -m torch.distributed.run --nproc_per_node=8 --rdzv_backend c10d --rdzv-endpoint=localhost:0 train.py hparams/best_ff.yaml --find_unused_parameters
+python -m torch.distributed.run --nproc_per_node=8 --rdzv_backend c10d --rdzv-endpoint=localhost:0 train.py hparams/brq_ff.yaml --find_unused_parameters
