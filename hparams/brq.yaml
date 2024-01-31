@@ -1,23 +1,21 @@
 # ############################################################################
-# Model: SSL: Best-RQ HyperConformer
-# Encoder: HyperConformer Encoder (w/Random Projection Quantizer)
-# loss: Cross entropy
+# Model: SSL: Implementation of Best-RQ
+# Encoder: Conformer Encoder w/Random Projection Quantizer
 # Training: Librispeech 960h
-# Authors:  Ryan Whetten
+# Authors:  Ryan
 # ############################################################################
 # Seed needs to be set at top of yaml, before objects with parameters are made
 
-seed: 3000
+seed: 1000
 __set_seed: !apply:torch.manual_seed [!ref <seed>]
 
 project_name: alt-attention
-experiment_name: ff_adamw
-architecture: brq-fastformer
+experiment_name: brq
+architecture: brq-conformer
 wandb_offline: True
 
-data_folder: /gpfsscratch/rech/nkp/uaj64gk/corpus/LibriSpeech/
-output_folder: !ref results/best_fastconformer/<seed>
-output_wer_folder: !ref <output_folder>/
+data_folder: /gpfsdswork/dataset/LibriSpeechAsrCorpus
+output_folder: !ref results/brq/<seed>
 
 ckpt_interval_min: 15
 save_folder: !ref <output_folder>/save
@@ -39,19 +37,15 @@ log_interval: 500 # Logging every N optimizer steps
 precision: fp16
 max_grad_norm: 10.
 
-# Training parameters
-# To make Transformers converge, the global bath size should be large enough.
-# The global batch size is computed as batch_size * n_gpus * gradient_accumulation.
-# Empirically, we found that this value should be >= 128.
-# Please, set your parameters accordingly.
 
-number_of_epochs: 42
+# The training will either stops at number_of_epochs or optimizer_step_limit
+# I.e. the first that is reached.
+number_of_epochs: 83
 optimizer_step_limit: 400000
-grad_accumulation_factor: 2
 
-
-seconds_per_batch: 100 # Fits in a 32GB GPUs (V100)
+seconds_per_batch: 100 # Fits in a 11GB GPUs
 train_num_buckets: 50
+grad_accumulation_factor: 2
 
 train_dataloader_options:
    num_workers: 4
@@ -60,7 +54,7 @@ test_dataloader_options:
    batch_size:  8 # DynamicBatching not used at testing time
    num_workers: 4
 
-# Training parameters (based on Section 4.1.1 of Best-RQ paper)
+# Training parameters (based on Section 4.1.1)
 lr: 0.0008
 weight_decay: 0.01
 warmup: 25000
@@ -70,7 +64,9 @@ sample_rate: 16000
 n_fft: 400
 n_mels: 80
 hop_length: 10
-pad_to_divisible_by: 4
+pad_to_divisible_by: 4 
+# this is because the convolutions reduction dim by 4 
+# so the input to quantizer also needs to reduce dim by 4
 
 ####################### Model parameters ###########################
 # Transformer
@@ -83,15 +79,6 @@ transformer_dropout: 0.1
 activation: !name:torch.nn.GELU
 output_neurons: 5000
 encoder_layerdrop: 0.05
-# specify 'hypermixing' for usage of multi-head HyperMixer instead of MultiHeadAttention
-# You can also specify RelPosMHAXL for conformer
-# attention_type: hypermixing
-attention_type: fastattention
-
-# option 1) 'conformer' for HyperConformer; 
-# option 2) 'transformer' for vanilla HyperMixer
-# option 3) 'branchformer': HyperBranchformer
-encoder_module: conformer
 
 # 15% masking
 mask_length: 4 # for 400ms
@@ -126,8 +113,8 @@ Transformer: !new:speechbrain.lobes.models.transformer.TransformerASR.Transforme
     d_ffn: !ref <d_ffn>
     dropout: !ref <transformer_dropout>
     activation: !ref <activation>
-    encoder_module: !ref <encoder_module>
-    attention_type: !ref <attention_type>
+    encoder_module: conformer
+    attention_type: RelPosMHAXL
     normalize_before: True
     causal: False
     layerdrop_prob: !ref <encoder_layerdrop>
@@ -135,6 +122,7 @@ Transformer: !new:speechbrain.lobes.models.transformer.TransformerASR.Transforme
 # We must call an encoder wrapper so the decoder isn't run (we don't have any)
 wrapper: !new:speechbrain.lobes.models.transformer.TransformerASR.EncoderWrapper
    transformer: !ref <Transformer>
+
 
 Quantizer: !new:.quantiser.RandomProjectionQuantizer
     # projection
@@ -157,9 +145,6 @@ modules:
 model: !new:torch.nn.ModuleList
     - [!ref <CNN>, !ref <wrapper>, !ref <Quantizer>, !ref <linear>]
 
-############################## features ################################
-
-
 compute_features: !new:speechbrain.lobes.features.Fbank
     sample_rate: !ref <sample_rate>
     n_fft: !ref <n_fft>
@@ -169,7 +154,18 @@ normalize: !new:speechbrain.processing.features.InputNormalization
     norm_type: global
     update_until_epoch: 4
 
+
 ############################## running ################################
+
+epoch_counter: !new:speechbrain.utils.epoch_loop.EpochCounter
+   limit: !ref <number_of_epochs>
+
+
+train_steps_logger: !new:speechbrain.utils.train_logger.FileTrainLogger
+   save_file: !ref <train_steps_log>
+
+train_stage_logger: !new:speechbrain.utils.train_logger.FileTrainLogger
+   save_file: !ref <train_stage_log>
 
 optimizer: !name:torch.optim.AdamW
     lr: !ref <lr>
@@ -179,15 +175,6 @@ optimizer: !name:torch.optim.AdamW
 noam_annealing: !new:speechbrain.nnet.schedulers.NoamScheduler
     lr_initial: !ref <lr>
     n_warmup_steps: 25000
-
-epoch_counter: !new:speechbrain.utils.epoch_loop.EpochCounter
-    limit: !ref <number_of_epochs>
-
-train_steps_logger: !new:speechbrain.utils.train_logger.FileTrainLogger
-   save_file: !ref <train_steps_log>
-
-train_stage_logger: !new:speechbrain.utils.train_logger.FileTrainLogger
-   save_file: !ref <train_stage_log>
 
 checkpointer: !new:speechbrain.utils.checkpoints.Checkpointer
     checkpoints_dir: !ref <save_folder>

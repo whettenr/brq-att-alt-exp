@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH --job-name=brqb   # nom du job
+#SBATCH --job-name=b   # nom du job
 #SBATCH --account=nkp@v100
 #SBATCH -C v100
 #SBATCH --partition=gpu_p2
@@ -15,4 +15,4 @@ conda activate aa
 
 cd /gpfswork/rech/nkp/uaj64gk/attention_alt/brq-att-alt-exp
 
-python -m torch.distributed.run --nproc_per_node=8 --rdzv_backend c10d --rdzv-endpoint=localhost:0 train.py hparams/best_rq_base.yaml --find_unused_parameters
+python -m torch.distributed.run --nproc_per_node=8 --rdzv_backend c10d --rdzv-endpoint=localhost:0 train.py hparams/brq.yaml --find_unused_parameters
