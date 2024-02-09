@@ -37,7 +37,7 @@ lr: 0.0003
 lr_wav2vec: 0.00005
 precision: fp32 # bf16, fp16 or fp32
 sample_rate: 16000
-sorting: descending
+sorting: ascending
 num_workers: 2
 
 # With data_parallel batch_size is split into N jobs
