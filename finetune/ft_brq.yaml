@@ -66,6 +66,7 @@ freeze_wav2vec: False
 output_neurons_ctc: 29  # BPE size, index(blank/eos/bos) = 0
 blank_index: 0
 
+kenlm_model_path: null
 # Decoding parameters
 test_beam_search:
    beam_size: 200
@@ -80,7 +81,7 @@ test_beam_search:
    # can be downloaded from here https://www.openslr.org/11/ or trained with kenLM
    # It can either be a .bin or .arpa ; note: .arpa is much slower at loading
    # If you don't want to use an LM, comment it out or set it to null
-   kenlm_model_path: null
+   kenlm_model_path: !<kenlm_model_path>
 
 #
 # Functions and classes
