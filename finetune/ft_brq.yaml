@@ -1,8 +1,8 @@
 # ################################
-# Model: wav2vec2 + DNN + CTC
+# Model: bestRQ + DNN + CTC
 # Decoding AM: Greedy for validation, and Beam search for testing
 # Augmentation: SpecAugment
-# Authors: Sung-Lin Yeh 2021, Rudolf A. Braun 2022, Titouan Parcollet 2022, Adel Moumen 2023
+# Authors: Ryan Whetten 2024
 # ################################
 
 # Seed needs to be set at top of yaml, before objects with parameters are made
@@ -23,13 +23,13 @@ data_folder: !PLACEHOLDER # e,g./path/to/LibriSpeech
 train_splits: ["train-clean-100"]
 dev_splits: ["dev-clean"]
 test_splits: ["test-clean", "test-other"]
-skip_prep: False
+skip_prep: True
 ckpt_interval_minutes: 25 # save checkpoint every N min
-train_csv: !ref <output_folder>/train.csv
-valid_csv: !ref <output_folder>/dev-clean.csv
+train_csv: !ref results/ft/csv/train.csv
+valid_csv: !ref results/ft/csv/dev-clean.csv
 test_csv:
-   - !ref <output_folder>/test-clean.csv
-   - !ref <output_folder>/test-other.csv
+   - !ref results/ft/csv/test-clean.csv
+   - !ref results/ft/csv/test-other.csv
 
 # Training parameters
 number_of_epochs: 30

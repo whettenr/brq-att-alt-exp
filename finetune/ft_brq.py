@@ -201,7 +201,7 @@ class ASR(sb.Brain):
 
         else:  # HuggingFace pretrained model
             self.wav2vec_optimizer = self.hparams.wav2vec_opt_class(
-                self.modules.wav2vec2.parameters()
+                self.modules.pt_model.parameters()
             )
 
         self.model_optimizer = self.hparams.model_opt_class(
