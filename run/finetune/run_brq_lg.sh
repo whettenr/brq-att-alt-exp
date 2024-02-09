@@ -4,6 +4,7 @@
 #SBATCH --account=dha@v100
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=8
+#SBATCH -C v100-32g
 #SBATCH --qos=qos_gpu-t4
 #SBATCH --time=30:00:00          # temps d'exécution maximum demande (HH:MM:SS) 
 #SBATCH --output=log/brq_lg_%j.log  # log file
