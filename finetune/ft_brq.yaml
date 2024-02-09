@@ -81,7 +81,7 @@ test_beam_search:
    # can be downloaded from here https://www.openslr.org/11/ or trained with kenLM
    # It can either be a .bin or .arpa ; note: .arpa is much slower at loading
    # If you don't want to use an LM, comment it out or set it to null
-   kenlm_model_path: !<kenlm_model_path>
+   kenlm_model_path: !ref <kenlm_model_path>
 
 #
 # Functions and classes
