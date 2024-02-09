@@ -4,6 +4,7 @@
 #SBATCH --account=dha@v100
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=8
+#SBATCH --qos=qos_gpu-t4
 #SBATCH --time=30:00:00          # temps d'exécution maximum demande (HH:MM:SS) 
 #SBATCH --output=log/ff_lg_%j.log  # log file
 
@@ -34,4 +35,3 @@ python finetune/ft_brq.py finetune/ft_brq.yaml \
     --attention_type $attention_type --encoder_module $encoder_module \
     --output_folder $output_folder \
     --test_only --kenlm_model_path /gpfswork/rech/nkp/uaj64gk/bestrqexp/4-gram.arpa.gz
-
