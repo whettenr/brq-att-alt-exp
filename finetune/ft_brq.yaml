@@ -63,7 +63,7 @@ dnn_dropout: 0.15
 freeze_wav2vec: False
 
 # Outputs
-output_neurons: 29  # BPE size, index(blank/eos/bos) = 0
+output_neurons_ctc: 29  # BPE size, index(blank/eos/bos) = 0
 blank_index: 0
 
 # Decoding parameters
@@ -237,7 +237,7 @@ pt_model: !new:torch.nn.ModuleList
 
 ctc_lin: !new:speechbrain.nnet.linear.Linear
    input_size: !ref <dnn_neurons>
-   n_neurons: !ref <output_neurons>
+   n_neurons: !ref <output_neurons_ctc>
 
 log_softmax: !new:speechbrain.nnet.activations.Softmax
    apply_log: True
