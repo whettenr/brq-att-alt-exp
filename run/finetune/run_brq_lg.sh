@@ -20,3 +20,10 @@ python finetune/ft_brq.py finetune/ft_brq.yaml \
     --output_folder results/ft/brq_lg
 
 
+python finetune/ft_brq.py finetune/ft_brq.yaml \
+    --data_folder /gpfsdswork/dataset/LibriSpeechAsrCorpus \
+    --pt_model_hub /gpfswork/rech/nkp/uaj64gk/attention_alt/brq-att-alt-exp/results/brq_lg/1000/save/CKPT+2024-02-02+05-07-26+00 \
+    --pt_model_output_dim 768 \
+    --output_folder results/ft/brq_lg \
+    --test_only --kenlm_model_path /gpfswork/rech/nkp/uaj64gk/bestrqexp/4-gram.arpa.gz
+    
