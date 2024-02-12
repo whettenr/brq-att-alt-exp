@@ -1,13 +1,12 @@
 #!/bin/bash
 
 #SBATCH --job-name=hc_lg   # nom du job
-#SBATCH --account=nkp@v100
-#SBATCH -C v100
-#SBATCH --partition=gpu_p2
+#SBATCH --account=nkp@a100
+#SBATCH -C a100
 #SBATCH --gres=gpu:8
 #SBATCH --cpus-per-task=16
 #SBATCH --exclusive
-#SBATCH --time=20:00:00          # temps d'exécution maximum demande (HH:MM:SS) 
+#SBATCH --time=20:00:00         # temps d'exécution maximum demande (HH:MM:SS) 
 #SBATCH --output=log/hc_lg_%j.log  # log file
 
 module load pytorch-gpu/py3/2.0.1
