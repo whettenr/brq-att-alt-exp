@@ -211,6 +211,7 @@ class BestRQBrain(sb.core.Brain):
                     "epoch": epoch,
                     "steps": self.optimizer_step,
                     "lr": self.optimizer.param_groups[0]["lr"],
+                    "VRAM": torch.cuda.max_memory_allocated(), 
                 },
                 train_stats=self.train_stats,
                 valid_stats=stage_stats,
