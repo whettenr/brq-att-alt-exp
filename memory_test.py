@@ -211,6 +211,7 @@ class BestRQBrain(sb.core.Brain):
                     "epoch": epoch,
                     "steps": self.optimizer_step,
                     "lr": self.optimizer.param_groups[0]["lr"],
+                    "VRAM": torch.cuda.max_memory_allocated(), 
                 },
                 train_stats=self.train_stats,
                 valid_stats=stage_stats,
@@ -255,11 +256,11 @@ def dataio_prepare(hparams):
     @sb.utils.data_pipeline.takes("wav")
     @sb.utils.data_pipeline.provides("sig")
     def audio_pipeline(wav):
+        # print(wav)
         sig = sb.dataio.dataio.read_audio(wav)
-        print('sig')
-        print(sig.shape)
-        print(asdf)
-        return sig
+        # print(sig.shape)
+        x = torch.rand(80000) # 16000 = 1 sec
+        return x
 
     sb.dataio.dataset.add_dynamic_item(datasets, audio_pipeline)
     sb.dataio.dataset.set_output_keys(datasets, ["id", "sig"])
@@ -267,8 +268,9 @@ def dataio_prepare(hparams):
     # We create the DynamicBatch Sampler
     train_sampler = DynamicBatchSampler(
         train_data,
-        hparams["seconds_per_batch"],
-        num_buckets=hparams["train_num_buckets"],
+        # 1000,
+        num_buckets=1,
+        max_batch_length=10,
         length_func=lambda x: x["duration"],
         batch_ordering="random",
         shuffle=True,
@@ -285,7 +287,8 @@ def dataio_prepare(hparams):
     )
 
     train_loader_kwargs = {
-        "batch_sampler": train_sampler,
+        "batch_size": 10,
+        # "batch_sampler": train_sampler,
         "collate_fn": brq_mask_collate_fn_partial,
         "num_workers": hparams["train_dataloader_options"]["num_workers"],
         "pin_memory": True,
