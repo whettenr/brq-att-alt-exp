@@ -46,14 +46,6 @@ class BestRQBrain(sb.core.Brain):
             mask.to(self.device),
         )
 
-        # Downsample the inputs if specified
-        if hasattr(self.modules, "downsampler"):
-            wavs = self.modules.downsampler(wavs)
-
-        # Add waveform augmentation if specified.
-        if stage == sb.Stage.TRAIN and hasattr(self.hparams, "wav_augment"):
-            wavs, wav_lens = self.hparams.wav_augment(wavs, wav_lens)
-
         ############### START ##############
         ### get fbanks and normalize
         feats = self.hparams.compute_features(wavs)
