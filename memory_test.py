@@ -256,6 +256,9 @@ def dataio_prepare(hparams):
     @sb.utils.data_pipeline.provides("sig")
     def audio_pipeline(wav):
         sig = sb.dataio.dataio.read_audio(wav)
+        print('sig')
+        print(sig.shape)
+        print(asdf)
         return sig
 
     sb.dataio.dataset.add_dynamic_item(datasets, audio_pipeline)
