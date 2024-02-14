@@ -40,8 +40,8 @@ max_grad_norm: 10.
 
 # The training will either stops at number_of_epochs or optimizer_step_limit
 # I.e. the first that is reached.
-number_of_epochs: 83
-optimizer_step_limit: 400000
+number_of_epochs: 1000
+optimizer_step_limit: 205000
 
 seconds_per_batch: 400 
 train_num_buckets: 150
