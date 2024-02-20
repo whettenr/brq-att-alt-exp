@@ -4,16 +4,16 @@
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=8
 #SBATCH --qos=qos_gpu-t4
-#SBATCH --time=75:00:00          # temps d'exécution maximum demande (HH:MM:SS) 
+#SBATCH --time=35:00:00          # temps d'exécution maximum demande (HH:MM:SS) 
 #SBATCH --output=log/hc_cv_%j.log  # log file
 
-module load pytorch-gpu/py3/2.0.1
+module load pytorch-gpu/py3/2.1.1
 conda activate aa
 cd /gpfswork/rech/nkp/uaj64gk/attention_alt/brq-att-alt-exp
 
-hub=/gpfswork/rech/nkp/uaj64gk/attention_alt/brq-att-alt-exp/results/old/hc/1000/save/CKPT+2024-02-03+16-04-24+00
+hub=/gpfswork/rech/nkp/uaj64gk/attention_alt/brq-att-alt-exp/results/hc/1000/save/CKPT+2024-02-18+11-59-20+00
 num_layers='13'
-encoder_dim='512'
+encoder_dim='672'
 attention_type='hypermixing'
 encoder_module='conformer'
 output_folder='results/MP3/hc'
@@ -36,7 +36,8 @@ done
 
 language='eu'
 
-DatasetsFolders=("/users/rwhetten/commonvoice/cv-corpus-11.0-2022-09-21/$language" "/users/rwhetten/commonvoice/cv-corpus-11.0-2022-09-21/$language")
+
+DatasetsFolders=("/gpfsscratch/rech/nkp/uaj64gk/corpus/cv-corpus-11.0-2022-09-21/$language" "/gpfsscratch/rech/nkp/uaj64gk/corpus/cv-corpus-11.0-2022-09-21/$language")
 ConsideredTasks=('CommonVoice' 'CommonVoice')
 DownStreams=('LSTM' 'linear')
 

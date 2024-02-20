@@ -15,7 +15,7 @@ cd /gpfswork/rech/nkp/uaj64gk/attention_alt/brq-att-alt-exp
 hub=/gpfswork/rech/nkp/uaj64gk/attention_alt/brq-att-alt-exp/results/old/brq_lg/1000/save/CKPT+2024-02-02+05-07-26+00
 num_layers='25'
 num_encoder_layers='24'
-encoder_dim='768' # change to 848
+encoder_dim='848' # change to 848
 output_folder='results/MP3/brq_lg'
 csv_location=/gpfswork/rech/nkp/uaj64gk/attention_alt/brq-att-alt-exp/results/MP3S
 benchmark_location=/gpfswork/rech/nkp/uaj64gk/attention_alt/benchmarks
