@@ -8,7 +8,7 @@
 #SBATCH --time=75:00:00          # temps d'exécution maximum demande (HH:MM:SS) 
 #SBATCH --output=log/ff_lg_ls_%j.log  # log file
 
-module load pytorch-gpu/py3/2.0.1
+module load pytorch-gpu/py3/2.1.1
 conda activate aa
 cd /gpfswork/rech/nkp/uaj64gk/attention_alt/brq-att-alt-exp
 hub=/gpfswork/rech/nkp/uaj64gk/attention_alt/brq-att-alt-exp/results/ff_lg_test/ff_lg_tr_updrop/CKPT+2024-02-17+08-32-23+00

@@ -10,7 +10,7 @@
 #SBATCH --time=20:00:00          # temps d'exécution maximum demande (HH:MM:SS) 
 #SBATCH --output=log/lg_%j.log  # log file
 
-module load pytorch-gpu/py3/2.0.1
+module load pytorch-gpu/py3/2.1.1
 conda activate aa
 
 cd /gpfswork/rech/nkp/uaj64gk/attention_alt/brq-att-alt-exp
