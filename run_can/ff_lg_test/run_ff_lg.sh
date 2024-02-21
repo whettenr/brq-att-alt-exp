@@ -1,17 +1,34 @@
 #!/bin/bash
 
 #SBATCH --job-name=ff_lg   # nom du job
-#SBATCH --account=nkp@a100
+#SBATCH --account=rrg-ravanelm
 #SBATCH -C a100
-#SBATCH --gres=gpu:8
+#SBATCH --gres=gpu:2
+#SBATCH --nodes=1
 #SBATCH --cpus-per-task=16
 #SBATCH --exclusive
 #SBATCH --time=20:00:00          # temps d'exécution maximum demande (HH:MM:SS) 
 #SBATCH --output=log/ff_lg_%j.log  # log file
 
-module load pytorch-gpu/py3/2.1.1
-conda activate aa
+# load env
+module load python/3.11
+source $HOME/alt_att/aa/bin/activate
 
-cd /gpfswork/rech/nkp/uaj64gk/attention_alt/brq-att-alt-exp
+# set up data
+scp -r $HOME/projects/def-ravanelm/datasets/librispeech $SLURM_TMPDIR/
+cd $SLURM_TMPDIR/librispeech 
+tar -zxf dev-clean.tar.gz
+tar -zxf dev-other.tar.gz
+tar -zxf test-clean.tar.gz
+tar -zxf test-other.tar.gz
+tar -zxf train-clean-100.tar.gz
+tar -zxf train-clean-360.tar.gz
+tar -zxf train-other-500.tar.gz
 
-python -m torch.distributed.run --nproc_per_node=8 --rdzv_backend c10d --rdzv-endpoint=localhost:0 train.py hparams/fastformer_lg.yaml --find_unused_parameters
+# set up run
+cd  $HOME/alt_att/brq-att-alt-exp
+
+python -m torch.distributed.run --nproc_per_node=1 --rdzv_backend c10d --rdzv-endpoint=localhost:0 train.py hparams/fastformer_lg.yaml --find_unused_parameters \
+    --grad_accumulation_factor 8 --output_folder results/ff_lg_test/ff_lg_branch \
+    --d_model 1184 --encoder_module branchformer --transformer_dropout 0.2 \
+    --data_folder $SLURM_TMPDIR/librispeech/LibriSpeech 
