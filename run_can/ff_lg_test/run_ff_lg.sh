@@ -2,7 +2,6 @@
 
 #SBATCH --job-name=ff_lg   # nom du job
 #SBATCH --account=rrg-ravanelm
-#SBATCH -C a100
 #SBATCH --gres=gpu:2
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=16
