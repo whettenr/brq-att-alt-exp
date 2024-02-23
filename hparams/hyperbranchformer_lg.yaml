@@ -54,11 +54,11 @@ train_num_buckets: 150
 grad_accumulation_factor: 2
 
 train_dataloader_options:
-   num_workers: 4
+   num_workers: 2
 
 test_dataloader_options:
    batch_size:  8 # DynamicBatching not used at testing time
-   num_workers: 4
+   num_workers: 2
 
 # Training parameters (based on Section 4.1.1 of Best-RQ paper)
 lr: 0.0008
