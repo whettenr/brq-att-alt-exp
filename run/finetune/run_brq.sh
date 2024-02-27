@@ -13,15 +13,18 @@ conda activate aa
 
 cd /gpfswork/rech/nkp/uaj64gk/attention_alt/brq-att-alt-exp
 hub=/gpfswork/rech/nkp/uaj64gk/attention_alt/brq-att-alt-exp/results/brq/1000/save/CKPT+2024-02-18+02-51-05+00
+encoder_dim='576'
 
 python finetune/ft_brq.py finetune/ft_brq.yaml \
     --data_folder /gpfsdswork/dataset/LibriSpeechAsrCorpus \
     --pt_model_hub $hub \
+    --encoder_dim $encoder_dim \
     --output_folder results/ft/brq
 
 
 python finetune/ft_brq.py finetune/ft_brq.yaml \
     --data_folder /gpfsdswork/dataset/LibriSpeechAsrCorpus \
     --pt_model_hub $hub \
+    --encoder_dim $encoder_dim \
     --output_folder results/ft/brq \
     --test_only --kenlm_model_path /gpfswork/rech/nkp/uaj64gk/bestrqexp/4-gram.arpa.gz
