@@ -29,12 +29,12 @@ for i in "${!ConsideredTasks[@]}"; do
 	dataset_folder=${DatasetsFolders[i]}
 	python $benchmark_location/benchmarks/MP3S/$task/$downstream/train.py $benchmark_location/benchmarks/MP3S/$task/$downstream/hparams/ssl_brq.yaml \
 		--num_layers_ssl $num_layers --num_encoder_layers $num_encoder_layers --ssl_hub $hub --encoder_dim $encoder_dim --output_folder $output_folder/$task/$language/$downstream --data_folder $dataset_folder \
-		--language $language --debug
+		--language $language
 done
 
 language='eu'
 
-DatasetsFolders=("/users/rwhetten/commonvoice/cv-corpus-11.0-2022-09-21/$language" "/users/rwhetten/commonvoice/cv-corpus-11.0-2022-09-21/$language")
+DatasetsFolders=("/gpfsscratch/rech/nkp/uaj64gk/corpus/cv-corpus-11.0-2022-09-21/$language" "/gpfsscratch/rech/nkp/uaj64gk/corpus/cv-corpus-11.0-2022-09-21/$language")
 ConsideredTasks=('CommonVoice' 'CommonVoice')
 DownStreams=('LSTM' 'linear')
 
@@ -44,5 +44,5 @@ for i in "${!ConsideredTasks[@]}"; do
 	dataset_folder=${DatasetsFolders[i]}
 	python $benchmark_location/benchmarks/MP3S/$task/$downstream/train.py $benchmark_location/benchmarks/MP3S/$task/$downstream/hparams/ssl_brq.yaml \
 		--num_layers_ssl $num_layers --num_encoder_layers $num_encoder_layers --ssl_hub $hub --encoder_dim $encoder_dim --output_folder $output_folder/$task/$language/$downstream --data_folder $dataset_folder \
-		--language $language --debug
+		--language $language
 done
