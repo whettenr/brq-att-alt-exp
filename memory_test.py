@@ -150,6 +150,7 @@ class BestRQBrain(sb.core.Brain):
             log_dct["lr"] = current_lr
             log_dct["avg_loss"] = self.avg_train_loss
             log_dct["VRAM"] =torch.cuda.max_memory_allocated()
+            torch.cuda.reset_peak_memory_stats()
 
             if hasattr(self, "time_last_log"):
                 run_time_since_last_log = time.time() - self.time_last_log
