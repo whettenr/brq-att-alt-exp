@@ -231,7 +231,7 @@ def dataio_prepare(hparams):
         # print(wav)
         sig = sb.dataio.dataio.read_audio(wav)
         # print(sig.shape)
-        x = torch.rand(hparams['sim_test_time']) # 16000 = 1 sec
+        x = torch.rand(hparams['sim_test_time'] * 16000) # 16000 = 1 sec
         return x
 
     sb.dataio.dataset.add_dynamic_item(datasets, audio_pipeline)

@@ -16,6 +16,8 @@ wandb_offline: True
 
 data_folder: /gpfsdswork/dataset/LibriSpeechAsrCorpus
 output_folder: !ref results/brq/<seed>
+sim_test_time: 10
+sim_batch_size: 10
 
 ckpt_interval_min: 15
 save_folder: !ref <output_folder>/save

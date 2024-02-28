@@ -18,6 +18,8 @@ wandb_offline: True
 data_folder: /gpfsscratch/rech/nkp/uaj64gk/corpus/LibriSpeech/
 output_folder: !ref results/hc/<seed>
 output_wer_folder: !ref <output_folder>/
+sim_test_time: 10
+sim_batch_size: 10
 
 ckpt_interval_min: 15
 save_folder: !ref <output_folder>/save
