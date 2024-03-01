@@ -3,6 +3,7 @@
 #SBATCH --job-name=mem_t   # nom du job
 #SBATCH --account=dha@v100
 #SBATCH -C v100-32g
+#SBATCH --qos=qos_gpu-t4
 #SBATCH --gres=gpu:4
 #SBATCH --cpus-per-task=16
 #SBATCH --exclusive
