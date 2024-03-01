@@ -103,7 +103,6 @@ do
     rm -r results/toy/hc_lg/save
 done
 
-<<<<<<< HEAD
 for sim_test_time in 10 20 30 40 50 60
 do
     torchrun --nproc_per_node=4 --rdzv_backend c10d --rdzv-endpoint=localhost:0 \
