@@ -11,19 +11,19 @@ module load pytorch-gpu/py3/2.1.1
 conda activate aa
 cd /gpfswork/rech/nkp/uaj64gk/attention_alt/brq-att-alt-exp
 
-hub=/gpfswork/rech/nkp/uaj64gk/attention_alt/brq-att-alt-exp/results/old/hc_lg/1000/save/CKPT+2024-02-07+02-50-50+00
+hub=/gpfswork/rech/nkp/uaj64gk/attention_alt/brq-att-alt-exp/results/hc_lg/1000/save/CKPT+2024-03-01+23-03-35+00
 num_layers='25'
 num_encoder_layers='24'
-encoder_dim='768'
+encoder_dim='1048'
 attention_type='hypermixing'
 encoder_module='conformer'
 output_folder='results/MP3/hc_lg'
 benchmark_location=/gpfswork/rech/nkp/uaj64gk/attention_alt/benchmarks
 language='cy'
 
-DatasetsFolders=("/gpfsscratch/rech/nkp/uaj64gk/corpus/cv-corpus-11.0-2022-09-21/$language" "/gpfsscratch/rech/nkp/uaj64gk/corpus/cv-corpus-11.0-2022-09-21/$language")
-ConsideredTasks=('CommonVoice' 'CommonVoice')
-DownStreams=('LSTM' 'linear')
+DatasetsFolders=("/gpfsscratch/rech/nkp/uaj64gk/corpus/cv-corpus-11.0-2022-09-21/$language")
+ConsideredTasks=('CommonVoice')
+DownStreams=('LSTM')
 
 for i in "${!ConsideredTasks[@]}"; do
 	task=${ConsideredTasks[i]}
@@ -37,9 +37,9 @@ done
 
 language='eu'
 
-DatasetsFolders=("/users/rwhetten/commonvoice/cv-corpus-11.0-2022-09-21/$language" "/users/rwhetten/commonvoice/cv-corpus-11.0-2022-09-21/$language")
-ConsideredTasks=('CommonVoice' 'CommonVoice')
-DownStreams=('LSTM' 'linear')
+DatasetsFolders=("/users/rwhetten/commonvoice/cv-corpus-11.0-2022-09-21/$language")
+ConsideredTasks=('CommonVoice')
+DownStreams=('LSTM')
 
 for i in "${!ConsideredTasks[@]}"; do
 	task=${ConsideredTasks[i]}
