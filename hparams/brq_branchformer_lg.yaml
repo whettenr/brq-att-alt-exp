@@ -11,12 +11,12 @@ seed: 1000
 __set_seed: !apply:torch.manual_seed [!ref <seed>]
 
 project_name: alt-attention
-experiment_name: hb_lg
-architecture: brq-hyperbranchformer
+experiment_name: bf_lg
+architecture: brq-branchformer
 wandb_offline: True
 
 data_folder: /gpfsscratch/rech/nkp/uaj64gk/corpus/LibriSpeech/
-output_folder: !ref results/hbf_lg/<seed>
+output_folder: !ref results/bf_lg/<seed>
 output_wer_folder: !ref <output_folder>/
 sim_test_time: 10
 sim_batch_size: 10
@@ -76,7 +76,7 @@ pad_to_divisible_by: 4
 
 ####################### Model parameters ###########################
 # Transformer
-d_model: 1376
+d_model: 1056
 nhead: 8 # table 1 https://arxiv.org/pdf/2010.10504.pdf
 num_encoder_layers: 24 # section 4.1.1
 num_decoder_layers: 0
