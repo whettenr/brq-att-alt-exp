@@ -76,7 +76,7 @@ pad_to_divisible_by: 4
 
 ####################### Model parameters ###########################
 # Transformer
-d_model: 616
+d_model: 832
 nhead: 8 # table 1 https://arxiv.org/pdf/2010.10504.pdf
 num_encoder_layers: 12 # section 4.1.1
 num_decoder_layers: 0
