@@ -1,12 +1,12 @@
 #!/bin/bash
-#SBATCH --job-name=ls_hbf   # nom du job
+#SBATCH --job-name=ls_bfflg   # nom du job
 #SBATCH --account=dha@v100
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=8
 #SBATCH -C v100-32g
 #SBATCH --qos=qos_gpu-t4
 #SBATCH --time=20:00:00          # temps d'exécution maximum demande (HH:MM:SS) 
-#SBATCH --output=log/hbf_ls_%j.log  # log file
+#SBATCH --output=log/bff_lg_ls_%j.log  # log file
 
 module load pytorch-gpu/py3/2.1.1
 conda activate aa
