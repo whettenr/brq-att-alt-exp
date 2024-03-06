@@ -101,13 +101,6 @@ class BestRQBrain(sb.core.Brain):
         logits[:,mask_idx,:]
         targets[:,mask_idx].shape
 
-        if  not torch.isfinite(logits).all():
-            print('feats: ', torch.isfinite(feats).all())
-            print('src: ', torch.isfinite(src).all())
-            print('enc: ', torch.isfinite(enc_out).all())
-            print('logits: ', torch.isfinite(logits).all())
-            print('targets: ', torch.isfinite(targets).all())
-            # print('scaler: ', self.scaler.state_dict())
         ##### get masked region
         logits = logits[:,mask_idx,:]
         targets = targets[:,mask_idx]
@@ -229,9 +222,6 @@ def dataio_prepare(hparams):
     @sb.utils.data_pipeline.takes("wav")
     @sb.utils.data_pipeline.provides("sig")
     def audio_pipeline(wav):
-        # print(wav)
-        sig = sb.dataio.dataio.read_audio(wav)
-        # print(sig.shape)
         x = torch.rand(hparams['sim_test_time'] * 16000) # 16000 = 1 sec
         return x
 
