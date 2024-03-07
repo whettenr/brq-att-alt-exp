@@ -25,19 +25,19 @@ DatasetsFolders=("/gpfsscratch/rech/nkp/uaj64gk/corpus/cv-corpus-11.0-2022-09-21
 ConsideredTasks=('CommonVoice')
 DownStreams=('LSTM')
 
-for i in "${!ConsideredTasks[@]}"; do
-	task=${ConsideredTasks[i]}
-	downstream=${DownStreams[i]}
-	dataset_folder=${DatasetsFolders[i]}
-	python $benchmark_location/benchmarks/MP3S/$task/$downstream/train.py $benchmark_location/benchmarks/MP3S/$task/$downstream/hparams/ssl_brq.yaml \
-		--num_layers_ssl $num_layers --num_encoder_layers $num_encoder_layers --ssl_hub $hub --attention_type $attention_type --encoder_module $encoder_module --encoder_dim $encoder_dim \
-		--output_folder $output_folder/$task/$language/$downstream --data_folder $dataset_folder \
-		--language $language
-done
+# for i in "${!ConsideredTasks[@]}"; do
+# 	task=${ConsideredTasks[i]}
+# 	downstream=${DownStreams[i]}
+# 	dataset_folder=${DatasetsFolders[i]}
+# 	python $benchmark_location/benchmarks/MP3S/$task/$downstream/train.py $benchmark_location/benchmarks/MP3S/$task/$downstream/hparams/ssl_brq.yaml \
+# 		--num_layers_ssl $num_layers --num_encoder_layers $num_encoder_layers --ssl_hub $hub --attention_type $attention_type --encoder_module $encoder_module --encoder_dim $encoder_dim \
+# 		--output_folder $output_folder/$task/$language/$downstream --data_folder $dataset_folder \
+# 		--language $language
+# done
 
 language='eu'
 
-DatasetsFolders=("/users/rwhetten/commonvoice/cv-corpus-11.0-2022-09-21/$language")
+DatasetsFolders=("/gpfsscratch/rech/nkp/uaj64gk/corpus/cv-corpus-11.0-2022-09-21/$language")
 ConsideredTasks=('CommonVoice')
 DownStreams=('LSTM')
 
