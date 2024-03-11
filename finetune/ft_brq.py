@@ -442,7 +442,7 @@ if __name__ == "__main__":
             ]  # Replace the <blank> token with a blank character, needed for PyCTCdecode
             decoder = build_ctcdecoder(
                 labels,
-                kenlm_model_path=hparams["ngram_lm_path"],  # .arpa or .bin
+                kenlm_model_path=hparams["kenlm_model_path"],  # .arpa or .bin
                 alpha=0.5,  # Default by KenLM
                 beta=1.0,  # Default by KenLM
             )
