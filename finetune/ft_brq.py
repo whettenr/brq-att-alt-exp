@@ -78,22 +78,29 @@ class ASR(sb.Brain):
 
         p_ctc = self.hparams.log_softmax(logits)
 
-        if stage == sb.Stage.VALID:
+        if stage == sb.Stage.VALID or (
+            stage == sb.Stage.TEST and not self.hparams.use_language_modelling
+        ):
+
             p_tokens = sb.decoders.ctc_greedy_decode(
                 p_ctc, wav_lens, blank_id=self.hparams.blank_index
             )
-        elif stage == sb.Stage.TEST:
-            p_tokens = test_searcher(p_ctc, wav_lens)
+        # if stage == sb.Stage.VALID:
+        #     p_tokens = sb.decoders.ctc_greedy_decode(
+        #         p_ctc, wav_lens, blank_id=self.hparams.blank_index
+        #     )
+        # elif stage == sb.Stage.TEST:
+        #     p_tokens = test_searcher(p_ctc, wav_lens)
 
-            candidates = []
-            scores = []
+        #     candidates = []
+        #     scores = []
 
-            for batch in p_tokens:
-                candidates.append([hyp.text for hyp in batch])
-                scores.append([hyp.score for hyp in batch])
+        #     for batch in p_tokens:
+        #         candidates.append([hyp.text for hyp in batch])
+        #         scores.append([hyp.score for hyp in batch])
 
-            if hasattr(self.hparams, "rescorer"):
-                p_tokens, _ = self.hparams.rescorer.rescore(candidates, scores)
+        #     if hasattr(self.hparams, "rescorer"):
+        #         p_tokens, _ = self.hparams.rescorer.rescore(candidates, scores)
 
         return p_ctc, wav_lens, p_tokens
 
@@ -119,20 +126,44 @@ class ASR(sb.Brain):
                 "".join(self.tokenizer.decode_ndim(utt_seq)).split(" ")
                 for utt_seq in predicted_tokens
             ]
-        elif stage == sb.Stage.TEST:
-            if hasattr(self.hparams, "rescorer"):
-                predicted_words = [
-                    hyp[0].split(" ") for hyp in predicted_tokens
-                ]
-            else:
-                predicted_words = [
-                    hyp[0].text.split(" ") for hyp in predicted_tokens
-                ]
-
-        if stage != sb.Stage.TRAIN:
             target_words = [wrd.split(" ") for wrd in batch.wrd]
             self.wer_metric.append(ids, predicted_words, target_words)
             self.cer_metric.append(ids, predicted_words, target_words)
+        if stage == sb.Stage.TEST:  # Language model decoding only used for test
+            if self.hparams.use_language_modelling:
+                predicted_words = []
+                for logs in p_ctc:
+                    text = decoder.decode(logs.detach().cpu().numpy())
+                    predicted_words.append(text.split(" "))
+            else:
+                predicted_words = [
+                    "".join(self.tokenizer.decode_ndim(utt_seq)).split(" ")
+                    for utt_seq in predicted_tokens
+                ]
+            target_words = [wrd.split(" ") for wrd in batch.wrd]
+            self.wer_metric.append(ids, predicted_words, target_words)
+            self.cer_metric.append(ids, predicted_words, target_words)
+
+        # if stage == sb.Stage.VALID:
+        #     # Decode token terms to words
+        #     predicted_words = [
+        #         "".join(self.tokenizer.decode_ndim(utt_seq)).split(" ")
+        #         for utt_seq in predicted_tokens
+        #     ]
+        # elif stage == sb.Stage.TEST:
+        #     if hasattr(self.hparams, "rescorer"):
+        #         predicted_words = [
+        #             hyp[0].split(" ") for hyp in predicted_tokens
+        #         ]
+        #     else:
+        #         predicted_words = [
+        #             hyp[0].text.split(" ") for hyp in predicted_tokens
+        #         ]
+
+        # if stage != sb.Stage.TRAIN:
+        #     target_words = [wrd.split(" ") for wrd in batch.wrd]
+        #     self.wer_metric.append(ids, predicted_words, target_words)
+        #     self.cer_metric.append(ids, predicted_words, target_words)
 
         return loss
 
@@ -375,23 +406,48 @@ if __name__ == "__main__":
     # NB: This tokenizer corresponds to the one used for the LM!!
     asr_brain.tokenizer = label_encoder
 
-    ind2lab = label_encoder.ind2lab
-    vocab_list = [ind2lab[x] for x in range(len(ind2lab))]
+    # ind2lab = label_encoder.ind2lab
+    # vocab_list = [ind2lab[x] for x in range(len(ind2lab))]
 
-    from speechbrain.decoders.ctc import CTCBeamSearcher
+    # from speechbrain.decoders.ctc import CTCBeamSearcher
 
-    test_searcher = CTCBeamSearcher(
-        **hparams["test_beam_search"], vocab_list=vocab_list,
-    )
+    # test_searcher = CTCBeamSearcher(
+    #     **hparams["test_beam_search"], vocab_list=vocab_list,
+    # )
 
-    # Training
-    asr_brain.fit(
-        asr_brain.hparams.epoch_counter,
-        train_data,
-        valid_data,
-        train_loader_kwargs=hparams["train_dataloader_opts"],
-        valid_loader_kwargs=hparams["valid_dataloader_opts"],
-    )
+    # # Training
+    # asr_brain.fit(
+    #     asr_brain.hparams.epoch_counter,
+    #     train_data,
+    #     valid_data,
+    #     train_loader_kwargs=hparams["train_dataloader_opts"],
+    #     valid_loader_kwargs=hparams["valid_dataloader_opts"],
+    # )
+
+    if "use_language_modelling" in hparams:
+
+        if hparams["use_language_modelling"]:
+            try:
+                from pyctcdecode import build_ctcdecoder
+            except ImportError:
+                err_msg = "Optional dependencies must be installed to use pyctcdecode.\n"
+                err_msg += "Install using `pip install kenlm pyctcdecode`.\n"
+                raise ImportError(err_msg)
+
+            print('using language modeling')
+            ind2lab = label_encoder.ind2lab
+            labels = [ind2lab[x] for x in range(len(ind2lab))]
+            labels = [""] + labels[
+                1:
+            ]  # Replace the <blank> token with a blank character, needed for PyCTCdecode
+            decoder = build_ctcdecoder(
+                labels,
+                kenlm_model_path=hparams["ngram_lm_path"],  # .arpa or .bin
+                alpha=0.5,  # Default by KenLM
+                beta=1.0,  # Default by KenLM
+            )
+    else:
+        hparams["use_language_modelling"] = False
 
     # Testing
     if not os.path.exists(hparams["output_wer_folder"]):
