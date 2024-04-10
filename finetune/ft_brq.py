@@ -415,15 +415,6 @@ if __name__ == "__main__":
     #     **hparams["test_beam_search"], vocab_list=vocab_list,
     # )
 
-    # # Training
-    # asr_brain.fit(
-    #     asr_brain.hparams.epoch_counter,
-    #     train_data,
-    #     valid_data,
-    #     train_loader_kwargs=hparams["train_dataloader_opts"],
-    #     valid_loader_kwargs=hparams["valid_dataloader_opts"],
-    # )
-
     if "use_language_modelling" in hparams:
 
         if hparams["use_language_modelling"]:
@@ -448,6 +439,15 @@ if __name__ == "__main__":
             )
     else:
         hparams["use_language_modelling"] = False
+
+    # Training
+    asr_brain.fit(
+        asr_brain.hparams.epoch_counter,
+        train_data,
+        valid_data,
+        train_loader_kwargs=hparams["train_dataloader_opts"],
+        valid_loader_kwargs=hparams["valid_dataloader_opts"],
+    )
 
     # Testing
     if not os.path.exists(hparams["output_wer_folder"]):
