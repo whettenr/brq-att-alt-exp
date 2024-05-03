@@ -233,7 +233,7 @@ Transformer: !new:speechbrain.lobes.models.transformer.TransformerASR.Transforme
 
     normalize_before: True
     causal: False
-    output_hidden_states: True
+    output_hidden_states: False
 
 enc: !new:speechbrain.lobes.models.transformer.TransformerASR.EncoderWrapper
    transformer: !ref <Transformer>
