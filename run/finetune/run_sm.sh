@@ -14,7 +14,7 @@ conda activate aa
 cd /gpfswork/rech/nkp/uaj64gk/attention_alt/brq-att-alt-exp
 
 encoder_dim='632'
-attention_type='hypermixing'
+attention_type='SummaryMixing'
 encoder_module='conformer'
 output_folder='results/ft/summary_mix'
 hub=/gpfswork/rech/nkp/uaj64gk/attention_alt/brq-att-alt-exp/results/summary_mix/1000/save/CKPT+2024-04-05+22-22-03+00
