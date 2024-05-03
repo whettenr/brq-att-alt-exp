@@ -162,7 +162,7 @@ back_end_ffn: !new:speechbrain.nnet.containers.Sequential
 
 ####################### Model parameters ###########################
 # Transformer
-d_model: !ref <encoder_dim>
+d_model: !ref <pt_model_output_dim>
 nhead: 8 # table 1 https://arxiv.org/pdf/2010.10504.pdf
 num_encoder_layers: 12 # section 4.1.1
 num_decoder_layers: 0
