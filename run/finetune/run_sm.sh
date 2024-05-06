@@ -33,4 +33,5 @@ python finetune/ft_brq.py finetune/ft_brq_summary_mix.yaml \
     --pt_model_output_dim $encoder_dim \
     --attention_type $attention_type --encoder_module $encoder_module \
     --output_folder $output_folder \
+    --use_language_modelling true \
     --test_only --kenlm_model_path /gpfswork/rech/nkp/uaj64gk/bestrqexp/4-gram.arpa.gz
