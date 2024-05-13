@@ -13,7 +13,7 @@ conda activate aa
 
 cd /gpfswork/rech/nkp/uaj64gk/attention_alt/brq-att-alt-exp
 
-encoder_dim='512'
+encoder_dim='616'
 attention_type='fastattention'
 encoder_module='conformer'
 output_folder='results/ft/ff_mask_5'
