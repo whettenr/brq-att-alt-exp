@@ -5,7 +5,7 @@
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=8
 #SBATCH --qos=qos_gpu-t4
-#SBATCH --time=30:00:00          # temps d'exécution maximum demande (HH:MM:SS) 
+#SBATCH --time=100:00:00          # temps d'exécution maximum demande (HH:MM:SS) 
 #SBATCH --output=log/ff_%j.log  # log file
 
 module load pytorch-gpu/py3/2.1.1
