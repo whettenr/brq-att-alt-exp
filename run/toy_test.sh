@@ -68,7 +68,7 @@ do
         --grad_accumulation_factor 1 --precision fp16 --optimizer_step_limit 1000 \
         --sim_test_time $sim_test_time --sim_batch_size 2 \
         --log_interval 100 \
-        --nhead 1 --d_model 848\
+        --nhead 1 --d_model 848 \
         --output_folder results/toy/summary_mix_lg/
     rm -r results/toy/summary_mix_lg/save
 done
