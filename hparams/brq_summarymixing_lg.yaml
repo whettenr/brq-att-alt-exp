@@ -15,7 +15,7 @@ architecture: brq-conformer-summary_mix
 wandb_offline: True
 
 data_folder: /gpfsdswork/dataset/LibriSpeechAsrCorpus
-output_folder: !ref results/summary_mix_lg/<seed>
+output_folder: !ref results/summary_mix_lg2/<seed>
 sim_test_time: 10
 sim_batch_size: 10
 
