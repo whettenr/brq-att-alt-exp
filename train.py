@@ -140,13 +140,15 @@ class BestRQBrain(sb.core.Brain):
             ]
             cb_usage = targets.unique().shape[0] / self.hparams.cb_vocab
             norm = torch.cat(grads).norm()
-            wandb.log({
-                'loss': loss,
-                'param_norm':param_norms,
-                'grad_norm':norm,
-                'cb_usage':cb_usage,
-                **self.scaler.state_dict()
-            })
+            
+            if sb.utils.distributed.if_main_process():
+                wandb.log({
+                    'loss': loss,
+                    'param_norm':param_norms,
+                    'grad_norm':norm,
+                    'cb_usage':cb_usage,
+                    **self.scaler.state_dict()
+                })
   
         return loss
 
