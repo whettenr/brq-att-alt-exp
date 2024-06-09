@@ -19,7 +19,7 @@ conda activate mamba_ssl
 
 cd /gpfswork/rech/uul/ujg45iy/projects/mamba_ssl/brq-att-alt-exp
 hub=/gpfsscratch/rech/uul/ujg45iy/brq_mamba_bidirectional_lg/save/CKPT+2024-06-09+18-01-16+00
-encoder_dim='474'
+encoder_dim=848
 num_encoder_layers=24
 
 python finetune/ft_brq.py finetune/ft_brq_mamba.yaml \
