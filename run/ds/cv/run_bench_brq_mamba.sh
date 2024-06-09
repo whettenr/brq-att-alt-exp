@@ -16,8 +16,8 @@ conda activate mamba_ssl
 
 cd /gpfswork/rech/uul/ujg45iy/projects/mamba_ssl/brq-att-alt-exp
 hub=/gpfsscratch/rech/uul/ujg45iy/brq_mamba_bidirectional/save/CKPT+2024-06-07+17-55-16+00
-num_layers='13'
-encoder_dim='474'
+num_layers=13
+encoder_dim=474
 output_folder='/gpfsscratch/rech/uul/ujg45iy/FT/CV/brq_mamba_bidir'
 benchmark_location=/gpfswork/rech/uul/ujg45iy/projects/mamba_ssl/benchmarks
 language='cy'
