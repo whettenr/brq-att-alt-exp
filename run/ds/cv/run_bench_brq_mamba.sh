@@ -16,6 +16,7 @@ conda activate mamba_ssl
 
 cd /gpfswork/rech/uul/ujg45iy/projects/mamba_ssl/brq-att-alt-exp
 hub=/gpfsscratch/rech/uul/ujg45iy/brq_mamba_bidirectional/save/CKPT+2024-06-07+17-55-16+00
+num_layers='13'
 encoder_dim='474'
 output_folder='/gpfsscratch/rech/uul/ujg45iy/FT/CV/brq_mamba_bidir'
 benchmark_location=/gpfswork/rech/uul/ujg45iy/projects/mamba_ssl/benchmarks
@@ -32,7 +33,7 @@ for i in "${!ConsideredTasks[@]}"; do
 	python $benchmark_location/benchmarks/MP3S/$task/$downstream/train.py $benchmark_location/benchmarks/MP3S/$task/$downstream/hparams/ssl_brq.yaml \
 		--num_layers_ssl $num_layers --ssl_hub $hub --encoder_dim $encoder_dim --output_folder $output_folder/$task/$language/$downstream --data_folder $dataset_folder \
 		--language $language \ 
-        --attention_type mamba
+        --attention_type 'mamba'
 done
 
 
