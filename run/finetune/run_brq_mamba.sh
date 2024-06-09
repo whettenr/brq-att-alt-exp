@@ -26,4 +26,15 @@ python finetune/ft_brq.py finetune/ft_brq_mamba.yaml \
     --pt_model_hub $hub \
     --pt_model_output_dim $encoder_dim \
     --output_folder /gpfsscratch/rech/uul/ujg45iy/FT/LS/mamba_bidir_fp32/ \
-    --test_batch_size 4
+    --test_batch_size 1
+
+ngram='/gpfsscratch/rech/uul/ujg45iy/ngram/ls/4-gram.arpa'
+python finetune/ft_brq.py finetune/ft_brq_mamba.yaml \
+    --data_folder /gpfsdswork/dataset/LibriSpeech \
+    --pt_model_hub $hub \
+    --pt_model_output_dim $encoder_dim \
+    --output_folder /gpfsscratch/rech/uul/ujg45iy/FT/LS/mamba_bidir_fp32 \
+    --test_batch_size 1 \
+    --use_language_modelling True \
+    --kenlm_model_path $ngram \
+    --test_only

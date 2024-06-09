@@ -18,23 +18,27 @@ conda activate mamba_ssl
 
 
 cd /gpfswork/rech/uul/ujg45iy/projects/mamba_ssl/brq-att-alt-exp
-hub=/gpfsscratch/rech/uul/ujg45iy/brq_mamba_bidirectional/save/CKPT+2024-06-07+17-55-16+00
-encoder_dim='474'
+hub=/gpfsscratch/rech/uul/ujg45iy/brq_mamba_bidirectional_lg/save/CKPT+2024-06-07+17-55-16+00
+encoder_dim='678'
+num_encoder_layers=24
+
 
 python finetune/ft_brq.py finetune/ft_brq_mamba.yaml \
     --data_folder /gpfsdswork/dataset/LibriSpeech \
     --pt_model_hub $hub \
     --pt_model_output_dim $encoder_dim \
-    --output_folder /gpfsscratch/rech/uul/ujg45iy/FT/LS/mamba_bidir_fp32/ \
-    --test_batch_size 1
+    --output_folder /gpfsscratch/rech/uul/ujg45iy/FT/LS/lg_mamba_bidir_fp32/ \
+    --test_batch_size 4 \
+    --num_encoder_layers $num_encoder_layers 
 
 ngram='/gpfsscratch/rech/uul/ujg45iy/ngram/ls/4-gram.arpa'
 python finetune/ft_brq.py finetune/ft_brq_mamba.yaml \
     --data_folder /gpfsdswork/dataset/LibriSpeech \
     --pt_model_hub $hub \
     --pt_model_output_dim $encoder_dim \
-    --output_folder /gpfsscratch/rech/uul/ujg45iy/FT/LS/mamba_bidir_fp32 \
-    --test_batch_size 1 \
+    --output_folder /gpfsscratch/rech/uul/ujg45iy/FT/LS/lg_mamba_bidir_fp32 \
+    --test_batch_size 4 \
     --use_language_modelling True \
     --kenlm_model_path $ngram \
-    --test_only
+    --test_only \ 
+    --num_encoder_layers $num_encoder_layers 
