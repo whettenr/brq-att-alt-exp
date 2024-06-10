@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH --job-name=brq_mamba_ls_fp32   # nom du job
+#SBATCH --job-name=brq_mamba_ls_lg   # nom du job
 #SBATCH --account=uul@v100
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=8
@@ -18,25 +18,24 @@ conda activate mamba_ssl
 
 
 cd /gpfswork/rech/uul/ujg45iy/projects/mamba_ssl/brq-att-alt-exp
-hub=/gpfsscratch/rech/uul/ujg45iy/brq_mamba_bidirectional_lg/save/CKPT+2024-06-07+17-55-16+00
-encoder_dim='678'
+hub=/gpfsscratch/rech/uul/ujg45iy/brq_mamba_bidirectional_lg/save/CKPT+2024-06-09+18-01-16+00
+encoder_dim=848
 num_encoder_layers=24
-
 
 python finetune/ft_brq.py finetune/ft_brq_mamba.yaml \
     --data_folder /gpfsdswork/dataset/LibriSpeech \
     --pt_model_hub $hub \
     --pt_model_output_dim $encoder_dim \
-    --output_folder /gpfsscratch/rech/uul/ujg45iy/FT/LS/lg_mamba_bidir_fp32/ \
-    --test_batch_size 4 \
+    --output_folder /gpfsscratch/rech/uul/ujg45iy/FT/LS/mamba_bidir_lg/ \
+    --test_batch_size 4 \ 
     --num_encoder_layers $num_encoder_layers 
 
 ngram='/gpfsscratch/rech/uul/ujg45iy/ngram/ls/4-gram.arpa'
 python finetune/ft_brq.py finetune/ft_brq_mamba.yaml \
-    --data_folder /gpfsdswork/dataset/LibriSpeech \
+    --data_folder LibriSpeech \
     --pt_model_hub $hub \
     --pt_model_output_dim $encoder_dim \
-    --output_folder /gpfsscratch/rech/uul/ujg45iy/FT/LS/lg_mamba_bidir_fp32 \
+    --output_folder /gpfsscratch/rech/uul/ujg45iy/FT/LS/mamba_bidir_lg \
     --test_batch_size 4 \
     --use_language_modelling True \
     --kenlm_model_path $ngram \

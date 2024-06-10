@@ -1,25 +1,30 @@
 #!/bin/bash
-#SBATCH --job-name=cv_blg   # nom du job
-#SBATCH --account=dha@v100
+#SBATCH --job-name=er_b_mamba   # nom du job
+#SBATCH --account=uul@v100
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=8
-#SBATCH --qos=qos_gpu-t4
-#SBATCH --time=100:00:00          # temps d'exécution maximum demande (HH:MM:SS) 
-#SBATCH --output=log/brq_lg_cv_%j.log  # log file
+#SBATCH --time=20:00:00          # temps d'exécution maximum demande (HH:MM:SS) 
+#SBATCH --output=brq_cv_%j.log  # log file
+#SBATCH --array=0-4%1
 
-module load pytorch-gpu/py3/2.1.1
-conda activate aa
-cd /gpfswork/rech/nkp/uaj64gk/attention_alt/brq-att-alt-exp
+module purge
+module load cpuarch/amd
+module load pytorch-gpu/py3/2.2.0
+module load ffmpeg/4.2.2
+conda deactivate
+conda activate mamba_ssl
 
-hub=/gpfswork/rech/nkp/uaj64gk/attention_alt/brq-att-alt-exp/results/brq_lg/1000/save/CKPT+2024-02-28+09-05-17+00
-num_layers='25'
-num_encoder_layers='24'
-encoder_dim='848'
-output_folder='results/MP3/brq_lg'
-language='cy'
-benchmark_location=/gpfswork/rech/nkp/uaj64gk/attention_alt/benchmarks
+cd /gpfswork/rech/uul/ujg45iy/projects/mamba_ssl/brq-att-alt-exp
+hub=/gpfsscratch/rech/uul/ujg45iy/brq_mamba_bidirectional/save/CKPT+2024-06-07+17-55-16+00
+num_layers='13'
+encoder_dim='474'
+output_folder='/gpfsscratch/rech/uul/ujg45iy/FT/IE/brq_mamba_bidir'
+benchmark_location=/gpfswork/rech/uul/ujg45iy/projects/mamba_ssl/benchmarks
 
-DatasetsFolders=("/gpfsscratch/rech/nkp/uaj64gk/corpus/cv-corpus-11.0-2022-09-21/$language" "/gpfsscratch/rech/nkp/uaj64gk/corpus/cv-corpus-11.0-2022-09-21/$language")
+task='IEMOCAP'
+downstream='ecapa_tdnn'
+
+DatasetsFolders=("/gpfsscratch/rech/uul/ujg45iy/cv/cv-corpus-11.0-2022-09-21/$language" "/gpfsscratch/rech/uul/ujg45iy/cv/cv-corpus-11.0-2022-09-21/$language")
 ConsideredTasks=('CommonVoice' 'CommonVoice')
 DownStreams=('LSTM' 'linear')
 
@@ -33,8 +38,7 @@ for i in "${!ConsideredTasks[@]}"; do
         --encoder_dim $encoder_dim \
         --output_folder $output_folder/$task/$language/$downstream \
         --data_folder $dataset_folder \
-		--language $language \
-		--num_encoder_layers $num_encoder_layers
+		--language $language 
 done
 
 
@@ -48,7 +52,6 @@ for i in "${!ConsideredTasks[@]}"; do
 	dataset_folder=${DatasetsFolders[i]}
 	python $benchmark_location/benchmarks/MP3S/$task/$downstream/train.py $benchmark_location/benchmarks/MP3S/$task/$downstream/hparams/ssl_brq.yaml \
 		--num_layers_ssl $num_layers --ssl_hub $hub --encoder_dim $encoder_dim --output_folder $output_folder/$task/$language/$downstream --data_folder $dataset_folder \
-		--language $language \
-		--num_encoder_layers $num_encoder_layers
+		--language $language 
 done
 
