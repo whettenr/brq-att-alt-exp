@@ -64,6 +64,7 @@ test_dataloader_options:
 
 # Training parameters (based on Section 4.1.1 of Best-RQ paper)
 lr: 0.0008
+lr_init: 0.0
 weight_decay: 0.01
 warmup: 25000
 
@@ -179,8 +180,9 @@ optimizer: !name:torch.optim.AdamW
     weight_decay: !ref <weight_decay>
 
 noam_annealing: !new:speechbrain.nnet.schedulers.NoamScheduler
-    lr_initial: !ref <lr>
-    n_warmup_steps: 25000
+    lr_initial: !ref <lr_init>
+    n_warmup_steps: !ref <warmup>
+    # model_size: !ref <d_model>
 
 epoch_counter: !new:speechbrain.utils.epoch_loop.EpochCounter
     limit: !ref <number_of_epochs>
