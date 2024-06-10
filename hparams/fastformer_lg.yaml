@@ -182,7 +182,7 @@ optimizer: !name:torch.optim.AdamW
 noam_annealing: !new:speechbrain.nnet.schedulers.NoamScheduler
     lr_initial: !ref <lr_init>
     n_warmup_steps: !ref <warmup>
-    # model_size: !ref <d_model>
+    model_size: !ref <d_model>
 
 epoch_counter: !new:speechbrain.utils.epoch_loop.EpochCounter
     limit: !ref <number_of_epochs>
