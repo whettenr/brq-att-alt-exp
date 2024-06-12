@@ -22,7 +22,7 @@ encoder_dim=678
 output_folder='/gpfsscratch/rech/uul/ujg45iy/FT/LS-MP3S/brq_mamba_bidir_lg'
 benchmark_location=/gpfswork/rech/uul/ujg45iy/projects/mamba_ssl/benchmarks
 
-DatasetsFolders=("/gpfsdswork/dataset/LibriSpeech", "/gpfsdswork/dataset/LibriSpeech")
+DatasetsFolders=("/gpfsdswork/dataset/LibriSpeech" "/gpfsdswork/dataset/LibriSpeech")
 ConsideredTasks=('LibriSpeech' 'LibriSpeech')
 DownStreams=('LSTM' 'contextnet')
 
