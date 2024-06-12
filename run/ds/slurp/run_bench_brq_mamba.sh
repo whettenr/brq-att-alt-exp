@@ -4,7 +4,7 @@
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=8
 #SBATCH --time=20:00:00          # temps d'exécution maximum demande (HH:MM:SS) 
-#SBATCH --output=s_ls_%j.log  # log file
+#SBATCH --output=s_brq_mamba_%j.log  # log file
 #SBATCH --array=0-3%1
 
 module purge
