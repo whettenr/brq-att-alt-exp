@@ -1,10 +1,11 @@
 #!/bin/bash
-#SBATCH --job-name=ls_brq_mamba   # nom du job
+#SBATCH --job-name=s_brq_mamba   # nom du job
 #SBATCH --account=uul@v100
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=8
 #SBATCH --time=20:00:00          # temps d'exécution maximum demande (HH:MM:SS) 
-#SBATCH --output=brq_ls_%j.log  # log file
+#SBATCH --output=s_ls_%j.log  # log file
+#SBATCH --array=0-3%1
 
 module purge
 module load cpuarch/amd
@@ -17,12 +18,12 @@ cd /gpfswork/rech/uul/ujg45iy/projects/mamba_ssl/brq-att-alt-exp
 hub=/gpfsscratch/rech/uul/ujg45iy/brq_mamba_bidirectional/save/CKPT+2024-06-07+17-55-16+00
 num_layers=13
 encoder_dim=474
-output_folder='/gpfsscratch/rech/uul/ujg45iy/FT/LS-MP3S/brq_mamba_bidir'
+output_folder='/gpfsscratch/rech/uul/ujg45iy/FT/SLURP/brq_mamba_bidir'
 benchmark_location=/gpfswork/rech/uul/ujg45iy/projects/mamba_ssl/benchmarks
 
-DatasetsFolders=("/gpfsdswork/dataset/LibriSpeech" "/gpfsdswork/dataset/LibriSpeech")
-ConsideredTasks=('LibriSpeech' 'LibriSpeech')
-DownStreams=('LSTM' 'contextnet')
+DatasetsFolders=('/gpfsscratch/rech/uul/ujg45iy/SLURP/slurp' '/gpfsscratch/rech/uul/ujg45iy/SLURP/slurp')
+ConsideredTasks=('SLURP' 'SLURP')
+DownStreams=('LSTM_linear' 'linear')
 
 for i in "${!ConsideredTasks[@]}"; do
 	task=${ConsideredTasks[i]}
