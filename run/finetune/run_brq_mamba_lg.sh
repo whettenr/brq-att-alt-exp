@@ -6,8 +6,7 @@
 #SBATCH --cpus-per-task=8
 #SBATCH --qos=qos_gpu-t4
 #SBATCH --time=20:00:00          # temps d'exécution maximum demande (HH:MM:SS)
-#SBATCH --output=ssl-mamba-ls%j.log # fichier de sortie (%j = job ID)
-#SBATCH --error=ssl-mamba-ls%j.log # fichier d’erreur (%j = job ID)
+#SBATCH --output=brq_mamba_ls_lg-ls%j.log # fichier de sortie (%j = job ID)
 
 module purge
 module load cpuarch/amd
