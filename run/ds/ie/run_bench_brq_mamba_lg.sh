@@ -1,11 +1,11 @@
 #!/bin/bash
-#SBATCH --job-name=cv_brq_lg_mamba   # nom du job
+#SBATCH --job-name=ie_brq_lg_mamba   # nom du job
 #SBATCH --account=uul@v100
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=8
 #SBATCH --time=20:00:00          # temps d'exécution maximum demande (HH:MM:SS) 
-#SBATCH --output=brq_lg_cv_%j.log  # log file
-#SBATCH --array=0-2%1
+#SBATCH --output=brq_lg_ie_%j.log  # log file
+#SBATCH --array=0-4%1
 
 module purge
 module load cpuarch/amd
@@ -16,42 +16,40 @@ conda activate mamba_ssl
 
 cd /gpfswork/rech/uul/ujg45iy/projects/mamba_ssl/brq-att-alt-exp
 hub=/gpfsscratch/rech/uul/ujg45iy/brq_mamba_bidirectional_lg/save/CKPT+2024-06-09+18-01-16+00
-num_layers='24'
-encoder_dim='474'
-output_folder='/gpfsscratch/rech/uul/ujg45iy/FT/CV/brq_mamba_bidir_lg'
+num_layers=25
+num_encoder_layers=24
+encoder_dim=678
+output_folder='/gpfsscratch/rech/uul/ujg45iy/FT/IE/brq_mamba_bidir_lg'
 benchmark_location=/gpfswork/rech/uul/ujg45iy/projects/mamba_ssl/benchmarks
-language='cy'
 
-DatasetsFolders=("/gpfsscratch/rech/uul/ujg45iy/cv/cv-corpus-11.0-2022-09-21/$language" "/gpfsscratch/rech/uul/ujg45iy/cv/cv-corpus-11.0-2022-09-21/$language")
-ConsideredTasks=('CommonVoice' 'CommonVoice')
-DownStreams=('LSTM' 'linear')
+task='IEMOCAP'
+downstream='ecapa_tdnn'
 
-for i in "${!ConsideredTasks[@]}"; do
-	task=${ConsideredTasks[i]}
-	downstream=${DownStreams[i]}
-	dataset_folder=${DatasetsFolders[i]}
-	python $benchmark_location/benchmarks/MP3S/$task/$downstream/train.py $benchmark_location/benchmarks/MP3S/$task/$downstream/hparams/ssl_brq.yaml \
-		--num_layers_ssl $num_layers \
-        --ssl_hub $hub \
-        --encoder_dim $encoder_dim \
-        --output_folder $output_folder/$task/$language/$downstream \
-        --data_folder $dataset_folder \
-		--language $language \
-        --num_encoder_layers $num_encoder_layers 
+for i in {1..10}
+do
+echo "on speaker $i"
+python $benchmark_location/benchmarks/MP3S/$task/$downstream/train.py $benchmark_location/benchmarks/MP3S/$task/$downstream/hparams/ssl_brq.yaml \
+    --data_folder /gpfsscratch/rech/uul/ujg45iy/IEMOCAP/IEMOCAP/IEMOCAP_full_release \
+	--num_layers_ssl "$num_layers" \
+	--num_encoder_layers "$num_encoder_layers" \
+	--ssl_hub "$hub" \
+	--encoder_dim "$encoder_dim" \
+	--output_folder "$output_folder"/"$task"/"$downstream/$i" \
+	--test_spk_id=$i
 done
 
+downstream='linear'
 
-language='eu'
-ConsideredTasks=('CommonVoice' 'CommonVoice')
-DownStreams=('LSTM' 'linear')
-
-for i in "${!ConsideredTasks[@]}"; do
-	task=${ConsideredTasks[i]}
-	downstream=${DownStreams[i]}
-	dataset_folder=${DatasetsFolders[i]}
-	python $benchmark_location/benchmarks/MP3S/$task/$downstream/train.py $benchmark_location/benchmarks/MP3S/$task/$downstream/hparams/ssl_brq.yaml \
-		--num_layers_ssl $num_layers --ssl_hub $hub --encoder_dim $encoder_dim --output_folder $output_folder/$task/$language/$downstream --data_folder $dataset_folder \
-		--language $language \
-        --num_encoder_layers $num_encoder_layers 
+for i in {1..10}
+do
+echo "on speaker $i"
+python $benchmark_location/benchmarks/MP3S/$task/$downstream/train.py $benchmark_location/benchmarks/MP3S/$task/$downstream/hparams/ssl_brq.yaml \
+    --data_folder /gpfsscratch/rech/uul/ujg45iy/IEMOCAP/IEMOCAP/IEMOCAP_full_release \
+	--num_layers_ssl "$num_layers" \
+	--num_encoder_layers "$num_encoder_layers" \
+	--ssl_hub "$hub" \
+	--encoder_dim "$encoder_dim" \
+	--output_folder "$output_folder"/"$task"/"$downstream/$i" \
+	--test_spk_id=$i
 done
 
