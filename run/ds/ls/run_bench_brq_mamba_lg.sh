@@ -32,12 +32,22 @@ for i in "${!ConsideredTasks[@]}"; do
 	dataset_folder=${DatasetsFolders[i]}
 	
 	python $benchmark_location/benchmarks/MP3S/$task/$downstream/train.py $benchmark_location/benchmarks/MP3S/$task/$downstream/hparams/ssl_brq.yaml \
-		--num_layers_ssl $num_layers --num_encoder_layers $num_encoder_layers --ssl_hub $hub --encoder_dim $encoder_dim 
-		--output_folder $output_folder/$task/$downstream --data_folder $dataset_folder \
+		--num_layers_ssl $num_layers \
+		--num_encoder_layers $num_encoder_layers \
+		--ssl_hub $hub \
+		--encoder_dim $encoder_dim \
+		--output_folder $output_folder/$task/$downstream \
+		--data_folder $dataset_folder 
 	
 	python $benchmark_location/benchmarks/MP3S/$task/$downstream/train.py $benchmark_location/benchmarks/MP3S/$task/$downstream/hparams/ssl_brq.yaml \
-		--num_layers_ssl $num_layers --num_encoder_layers $num_encoder_layers --ssl_hub $hub --encoder_dim $encoder_dim \
-		--output_folder $output_folder/$task/$downstream --data_folder $dataset_folder --test_only --language_modelling True \
+		--num_layers_ssl $num_layers \
+		--num_encoder_layers $num_encoder_layers \
+		--ssl_hub $hub \
+		--encoder_dim $encoder_dim \
+		--output_folder $output_folder/$task/$downstream \
+		--data_folder $dataset_folder \
+		--test_only \
+		--language_modelling True \
     	--ngram_lm_path $ngram \
     	--test_only 
 done
