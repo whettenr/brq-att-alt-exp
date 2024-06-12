@@ -37,6 +37,7 @@ for i in "${!ConsideredTasks[@]}"; do
 		--ssl_hub $hub \
 		--encoder_dim $encoder_dim \
 		--output_folder $output_folder/$task/$downstream \
-		--data_folder $dataset_folder 
+		--data_folder $dataset_folder \
+		--skip_prep False
 	done
 

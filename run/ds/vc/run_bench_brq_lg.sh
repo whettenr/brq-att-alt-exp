@@ -31,5 +31,6 @@ for i in "${!ConsideredTasks[@]}"; do
 	python $benchmark_location/benchmarks/MP3S/$task/$downstream/train.py $benchmark_location/benchmarks/MP3S/$task/$downstream/hparams/ssl_brq.yaml \
 		--num_layers_ssl $num_layers --num_encoder_layers $num_encoder_layers --ssl_hub $hub --encoder_dim $encoder_dim \
 		--output_folder $output_folder/$task/$downstream --data_folder $dataset_folder \
-		--csv_location $csv_location
+		--csv_location $csv_location \
+		--skip_prep False
 done
