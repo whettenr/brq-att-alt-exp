@@ -21,7 +21,7 @@ encoder_dim=474
 output_folder='/gpfsscratch/rech/uul/ujg45iy/FT/SLURP/brq_mamba_bidir'
 benchmark_location=/gpfswork/rech/uul/ujg45iy/projects/mamba_ssl/benchmarks
 
-DatasetsFolders=('/gpfsscratch/rech/uul/ujg45iy/SLURP/slurp' '/gpfsscratch/rech/uul/ujg45iy/SLURP/slurp')
+DatasetsFolders=('/gpfsscratch/rech/uul/ujg45iy/SLURP/slurp/audio' '/gpfsscratch/rech/uul/ujg45iy/SLURP/slurp/audio')
 ConsideredTasks=('SLURP' 'SLURP')
 DownStreams=('LSTM_linear' 'linear')
 
