@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH --job-name=brq_mamba_ls_lg   # nom du job
+#SBATCH --job-name=brq_mamba_ls_lg_v2   # nom du job
 #SBATCH --account=uul@v100
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=8
