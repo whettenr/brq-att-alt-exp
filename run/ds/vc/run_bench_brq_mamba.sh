@@ -1,27 +1,27 @@
 #!/bin/bash
 #SBATCH --job-name=VC_brq_mamba   # nom du job
-#SBATCH --account=uul@v100
-#SBATCH --gres=gpu:1
-#SBATCH --cpus-per-task=8
-#SBATCH --time=20:00:00          # temps d'exécution maximum demande (HH:MM:SS) 
+#SBATCH --constraint='GPURAM_Min_32GB'
+#SBATCH --ntasks=1
+#SBATCH --nodes=1
+#SBATCH --gpus-per-node=1
+#SBATCH --partition=gpu
+#SBATCH --cpus-per-task=12
+#SBATCH --mem=20G
+#SBATCH --time=72:00:00          # temps d'exécution maximum demande (HH:MM:SS) 
 #SBATCH --output=brq_VC_%j.log  # log file
-#SBATCH --array=0-4%1
+#SBATCH --mail-type=BEGIN,END,FAIL
 
-module purge
-module load cpuarch/amd
-module load pytorch-gpu/py3/2.2.0
-module load ffmpeg/4.2.2
-conda deactivate
-conda activate mamba_ssl
+source /etc/profile.d/conda.sh
+conda activate mamba_speech
 
-cd /gpfswork/rech/uul/ujg45iy/projects/mamba_ssl/brq-att-alt-exp
-hub=/gpfsscratch/rech/uul/ujg45iy/brq_mamba_bidirectional/save/CKPT+2024-06-07+17-55-16+00
+cd /users/amoumen/machine_learning/research/mamba_speech/brq-att-alt-exp
+hub=/users/amoumen/machine_learning/research/mamba_speech/saved_models/brq_mamba_bidirectional
 num_layers=13
 encoder_dim=474
-output_folder='/gpfsscratch/rech/uul/ujg45iy/FT/VoxCeleb1/brq_mamba_bidir'
-benchmark_location=/gpfswork/rech/uul/ujg45iy/projects/mamba_ssl/benchmarks
+output_folder='/users/amoumen/machine_learning/research/mamba_speech/outputs/FT/VoxCeleb1/brq_mamba_bidir'
+benchmark_location=/users/amoumen/machine_learning/research/mamba_speech/benchmarks
 
-DatasetsFolders=("/gpfsdswork/dataset/VoxCeleb1" "/gpfsdswork/dataset/VoxCeleb1")
+DatasetsFolders=("/local_disk/arges/jduret/corpus/voxceleb2/" "/local_disk/arges/jduret/corpus/voxceleb2/")
 ConsideredTasks=('VoxCeleb1' 'VoxCeleb1')
 DownStreams=('ecapa_tdnn' 'Xvectors')
 
