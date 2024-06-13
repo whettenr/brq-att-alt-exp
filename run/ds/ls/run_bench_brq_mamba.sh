@@ -24,6 +24,9 @@ DatasetsFolders=("/gpfsdswork/dataset/LibriSpeech" "/gpfsdswork/dataset/LibriSpe
 ConsideredTasks=('LibriSpeech' 'LibriSpeech')
 DownStreams=('LSTM' 'contextnet')
 
+ngram='/gpfsscratch/rech/uul/ujg45iy/ngram/ls/4-gram.arpa'
+
+
 for i in "${!ConsideredTasks[@]}"; do
 	task=${ConsideredTasks[i]}
 	downstream=${DownStreams[i]}
@@ -35,6 +38,7 @@ for i in "${!ConsideredTasks[@]}"; do
 		--output_folder $output_folder/$task/$downstream \
 		--data_folder $dataset_folder 
 	
+	echo "Testing on $task $downstream with ngram"
 	python $benchmark_location/benchmarks/MP3S/$task/$downstream/train.py $benchmark_location/benchmarks/MP3S/$task/$downstream/hparams/ssl_brq.yaml \
 		--num_layers_ssl $num_layers \
 		--ssl_hub $hub \ 
