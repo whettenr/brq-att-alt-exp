@@ -7,6 +7,7 @@
 #SBATCH --qos=qos_gpu-t4
 #SBATCH --time=20:00:00          # temps d'exécution maximum demande (HH:MM:SS)
 #SBATCH --output=brq_mamba_ls_lg-ls%j.log # fichier de sortie (%j = job ID)
+#SBATCH --array=0-4%1
 
 module purge
 module load cpuarch/amd
