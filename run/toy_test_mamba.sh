@@ -5,7 +5,7 @@
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=16
 #SBATCH --exclusive
-#SBATCH --time=25:00:00          # temps d'exécution maximum demande (HH:MM:SS)
+#SBATCH --time=15:00:00          # temps d'exécution maximum demande (HH:MM:SS)
 #SBATCH --output=test-mamba-ls%j.log # fichier de sortie (%j = job ID)
 #SBATCH --error=test-mamba-ls%j.log # fichier d’erreur (%j = job ID)
 
