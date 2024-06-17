@@ -22,7 +22,7 @@ cd /gpfswork/rech/uul/ujg45iy/projects/mamba_ssl/brq-att-alt-exp
 
 
 # brq 
-for sim_test_time in 10 20 30 40 50 60 70 80 90
+for      in 10 20 30 40 50 60 70 80 90
 do
     torchrun --nproc_per_node=1 --rdzv_backend c10d --rdzv-endpoint=localhost:0 \
         memory_test.py hparams/brq_mamba_bidirectional.yaml --find_unused_parameters \
@@ -31,7 +31,7 @@ do
         --sim_test_time $sim_test_time --sim_batch_size 2 \
         --log_interval 100 \
         --output_folder /gpfsscratch/rech/uul/ujg45iy/results/toy/brq/
-    rm -r results/toy/brq/save
+    rm -r /gpfsscratch/rech/uul/ujg45iy/results/toy/brq/save
 done
 
 for sim_test_time in 10 20 30 40 50 60 70 80 90
@@ -43,5 +43,5 @@ do
         --sim_test_time $sim_test_time --sim_batch_size 2 \
         --log_interval 100 \
         --output_folder /gpfsscratch/rech/uul/ujg45iy/results/toy/brq_lg/
-    rm -r results/toy/brq_lg/save
+    rm -r /gpfsscratch/rech/uul/ujg45iy/results/toy/brq_lg/save
 done
