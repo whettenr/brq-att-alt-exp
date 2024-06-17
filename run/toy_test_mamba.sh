@@ -2,6 +2,7 @@
 
 #SBATCH --job-name=mem_t_mamba   # nom du job
 #SBATCH --account=uul@a100
+#SBATCH -C a100
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=16
 #SBATCH --exclusive
@@ -18,8 +19,6 @@ conda activate mamba_ssl
 
 
 cd /gpfswork/rech/uul/ujg45iy/projects/mamba_ssl/brq-att-alt-exp
-
-
 
 # brq 
 for sim_test_time in 10 20 30 40 50 60 70 80 90
