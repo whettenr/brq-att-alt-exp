@@ -22,7 +22,7 @@ cd /gpfswork/rech/uul/ujg45iy/projects/mamba_ssl/brq-att-alt-exp
 
 
 # brq 
-for      in 10 20 30 40 50 60 70 80 90
+for sim_test_time in 10 20 30 40 50 60 70 80 90
 do
     torchrun --nproc_per_node=1 --rdzv_backend c10d --rdzv-endpoint=localhost:0 \
         memory_test.py hparams/brq_mamba_bidirectional.yaml --find_unused_parameters \
