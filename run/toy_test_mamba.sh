@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH --job-name=mem_t_mamba   # nom du job
-#SBATCH --account=uul@v100
+#SBATCH --account=uul@a100
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=16
 #SBATCH --exclusive
