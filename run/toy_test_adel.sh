@@ -6,7 +6,8 @@
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=16
 #SBATCH --exclusive
-#SBATCH --time=20:00:00          # temps d'exécution maximum demande (HH:MM:SS) 
+#SBATCH --qos=qos_gpu-dev
+#SBATCH --time=2:00:00          # temps d'exécution maximum demande (HH:MM:SS) 
 #SBATCH --output=mem_test_%j.log  # log file
 
 module purge
