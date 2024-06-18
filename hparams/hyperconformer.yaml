@@ -15,7 +15,7 @@ experiment_name: hc
 architecture: brq-hyperconformer
 wandb_offline: True
 
-data_folder: /gpfsscratch/rech/nkp/uaj64gk/corpus/LibriSpeech/
+data_folder: /gpfsdswork/dataset/LibriSpeechAsrCorpus
 output_folder: !ref results/hc/<seed>
 output_wer_folder: !ref <output_folder>/
 sim_test_time: 10

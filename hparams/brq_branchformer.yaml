@@ -15,7 +15,7 @@ experiment_name: bf
 architecture: brq-branchformer
 wandb_offline: True
 
-data_folder: /gpfsscratch/rech/nkp/uaj64gk/corpus/LibriSpeech/
+data_folder: /gpfsdswork/dataset/LibriSpeechAsrCorpus
 output_folder: !ref results/bf/<seed>
 output_wer_folder: !ref <output_folder>/
 sim_test_time: 10
