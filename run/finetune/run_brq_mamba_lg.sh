@@ -26,7 +26,7 @@ python finetune/ft_brq.py finetune/ft_brq_mamba.yaml \
     --data_folder /gpfsdswork/dataset/LibriSpeech \
     --pt_model_hub $hub \
     --pt_model_output_dim $encoder_dim \
-    --output_folder /gpfsscratch/rech/uul/ujg45iy/FT/LS/mamba_bidir_lg/ \
+    --output_folder /gpfsscratch/rech/uul/ujg45iy/FT/LS/mamba_bidir_lg_new_seed/ \
     --test_batch_size 4 \ 
     --num_encoder_layers $num_encoder_layers 
 
@@ -35,7 +35,7 @@ python finetune/ft_brq.py finetune/ft_brq_mamba.yaml \
     --data_folder LibriSpeech \
     --pt_model_hub $hub \
     --pt_model_output_dim $encoder_dim \
-    --output_folder /gpfsscratch/rech/uul/ujg45iy/FT/LS/mamba_bidir_lg \
+    --output_folder /gpfsscratch/rech/uul/ujg45iy/FT/LS/mamba_bidir_lg_new_seed \
     --test_batch_size 4 \
     --use_language_modelling True \
     --kenlm_model_path $ngram \
