@@ -3,7 +3,6 @@ import logging
 import sys
 import time
 from functools import partial
-
 import speechbrain as sb
 import torch
 import torch.nn.functional as F
@@ -24,6 +23,7 @@ WARMUP_STEPS = 10
 WARMUP_MAX_DURATION = 90
 EVAL_AVG_STEPS = 10
 EVAL_MAX_DURATION = 90
+BATCH_SIZE = 6
 
 
 def compute_benchmark(batch, hparams, device="cuda"):
@@ -149,9 +149,16 @@ def main():
                 compute_benchmark(mask, hparams)
 
     save_results = []
+    save_runs = []
     for sim_test_time in range(10, EVAL_MAX_DURATION, 10):
         avg_duration = 0.0
+        std_duration = 0.0
+        min_duration = 1000000.0
+        max_duration = 0.0
+        min_mem = float("inf")
+        max_mem = float("-inf")
         avg_mem = 0.0
+        std_mem = 0.0
         for n_iter in range(EVAL_AVG_STEPS):
             x = torch.rand(sim_test_time * 16000)
 
@@ -160,7 +167,7 @@ def main():
                     {
                         "sig":x,
                         "id": f"{i}"
-                    } for i in range(6)
+                    } for i in range(BATCH_SIZE)
                 ]
             )
 
@@ -169,23 +176,41 @@ def main():
             torch.cuda.reset_peak_memory_stats()
 
             avg_duration += duration / EVAL_AVG_STEPS
+            std_duration += duration ** 2 / EVAL_AVG_STEPS
             avg_mem += mem / EVAL_AVG_STEPS
+            std_mem += mem ** 2 / EVAL_AVG_STEPS
+
+            min_duration = min(min_duration, duration)
+            max_duration = max(max_duration, duration)
+
+            min_mem = min(min_mem, mem)
+            max_mem = max(max_mem, mem)
+
+            save_runs.append([sim_test_time, duration, mem])
 
         # convert in GiB
         avg_mem_gib = avg_mem / 1024 / 1024 / 1024
+        min_mem_gib = min_mem / 1024 / 1024 / 1024
+        max_mem_gib = max_mem / 1024 / 1024 / 1024
 
-        print(f"Duration for {sim_test_time} seconds: {avg_duration}; Memory: {avg_mem}; Memory in GiB: {avg_mem_gib}")
+        print(f"Duration for {sim_test_time} seconds: {avg_duration}; Memory: {avg_mem}; Memory in GiB: {avg_mem_gib}; Min Memory: {min_mem_gib}; Max Memory: {max_mem_gib}")
 
-        save_results.append((sim_test_time, avg_duration, avg_mem, avg_mem_gib))
+        save_results.append((sim_test_time, avg_duration, avg_mem, avg_mem_gib, std_duration, std_mem, min_duration, max_duration, min_mem_gib, max_mem_gib))
 
     # save in csv file at location hparams["output_folder"]
     import os
     os.makedirs(os.path.join("memory_results", hparams["experiment_name"]), exist_ok=True)
     save_file = os.path.join("memory_results", hparams["experiment_name"], "memory_test.csv")
     with open(save_file, "w") as f:
-        f.write("Time,Duration,Memory,Memory (GiB)\n")
-        for time, duration, mem, mem_gib in save_results:
-            f.write(f"{time},{duration},{mem},{mem_gib}\n")
+        f.write("Time,Duration,Memory,Memory (GiB), Std Duration, Std Memory, Min Duration, Max Duration, Min Memory (GiB), Max Memory (GiB)\n")
+        for time, duration, mem, mem_gib, std_duration, std_mem, min_duration, max_duration, min_mem, max_mem in save_results:
+            f.write(f"{time},{duration},{mem},{mem_gib},{std_duration},{std_mem}, {min_duration}, {max_duration}, {min_mem}, {max_mem}\n")
+
+    save_file = os.path.join("memory_results", hparams["experiment_name"], "memory_runs.csv")
+    with open(save_file, "w") as f:
+        f.write("Time,Duration,Memory\n")
+        for time, duration, mem in save_runs:
+            f.write(f"{time},{duration},{mem}\n")
         
 
 if __name__ == "__main__":

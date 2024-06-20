@@ -10,7 +10,7 @@ seed: 1000
 __set_seed: !apply:torch.manual_seed [!ref <seed>]
 
 project_name: alt-attention
-experiment_name: brq
+experiment_name: brq_summary
 architecture: brq-conformer-summary_mix
 wandb_offline: True
 

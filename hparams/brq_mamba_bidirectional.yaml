@@ -72,7 +72,7 @@ pad_to_divisible_by: 4
 
 ####################### Model parameters ###########################
 # Transformer
-d_model: 576
+d_model: 474
 nhead: 8 # table 1 https://arxiv.org/pdf/2010.10504.pdf
 num_encoder_layers: 12 # section 4.1.1
 num_decoder_layers: 0
@@ -116,10 +116,11 @@ Transformer: !new:speechbrain.lobes.models.transformer.TransformerASR.Transforme
     dropout: !ref <transformer_dropout>
     activation: !ref <activation>
     encoder_module: conformer
-    attention_type: RelPosMHAXL
+    attention_type: mamba
     normalize_before: True
     causal: False
     layerdrop_prob: !ref <encoder_layerdrop>
+    bidirectional: True
 
 # We must call an encoder wrapper so the decoder isn't run (we don't have any)
 wrapper: !new:speechbrain.lobes.models.transformer.TransformerASR.EncoderWrapper
