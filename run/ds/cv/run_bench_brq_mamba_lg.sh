@@ -45,6 +45,7 @@ done
 language='eu'
 ConsideredTasks=('CommonVoice' 'CommonVoice')
 DownStreams=('LSTM' 'linear')
+DatasetsFolders=("/gpfsscratch/rech/uul/ujg45iy/cv/cv-corpus-11.0-2022-09-21/$language" "/gpfsscratch/rech/uul/ujg45iy/cv/cv-corpus-11.0-2022-09-21/$language")
 
 for i in "${!ConsideredTasks[@]}"; do
 	task=${ConsideredTasks[i]}
