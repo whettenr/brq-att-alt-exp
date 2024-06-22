@@ -33,8 +33,8 @@ test_csv:
 
 # Training parameters
 number_of_epochs: 30
-lr: 0.0003
-lr_wav2vec: 0.00005
+lr: 0.003
+lr_wav2vec: 0.0005
 precision: fp32 # bf16, fp16 or fp32
 sample_rate: 16000
 sorting: ascending
