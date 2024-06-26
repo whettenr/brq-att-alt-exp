@@ -6,7 +6,7 @@
 # ############################################################################
 # Seed needs to be set at top of yaml, before objects with parameters are made
 
-seed: 1000
+seed: 84
 __set_seed: !apply:torch.manual_seed [!ref <seed>]
 
 project_name: alt-attention
@@ -72,7 +72,7 @@ pad_to_divisible_by: 4
 
 ####################### Model parameters ###########################
 # Transformer
-d_model: 848
+d_model: 678
 nhead: 8 # table 1 https://arxiv.org/pdf/2010.10504.pdf
 num_encoder_layers: 24 # section 4.1.1
 num_decoder_layers: 0
@@ -177,8 +177,9 @@ optimizer: !name:torch.optim.AdamW
     weight_decay: !ref <weight_decay>
 
 noam_annealing: !new:speechbrain.nnet.schedulers.NoamScheduler
-    lr_initial: !ref <lr>
+    lr_initial: 0.0
     n_warmup_steps: 25000
+    model_size: !ref <d_model>
 
 checkpointer: !new:speechbrain.utils.checkpoints.Checkpointer
     checkpoints_dir: !ref <save_folder>

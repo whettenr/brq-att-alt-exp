@@ -27,7 +27,10 @@ do
 echo "on speaker $i"
 python $benchmark_location/benchmarks/MP3S/$task/$downstream/train.py $benchmark_location/benchmarks/MP3S/$task/$downstream/hparams/ssl_brq.yaml \
     --data_folder /users/rwhetten/IEMOCAP/IEMOCAP_full_release \
-	--num_layers_ssl "$num_layers" --num_encoder_layers "$num_encoder_layers" --ssl_hub "$hub" --encoder_dim "$encoder_dim" --output_folder "$output_folder"/"$task"/"$downstream/$i" \
+	--num_layers_ssl "$num_layers" \
+	 --ssl_hub "$hub" \
+	 --encoder_dim "$encoder_dim" \
+	 --output_folder "$output_folder"/"$task"/"$downstream/$i" \
 	--test_spk_id=$i
 done
 
@@ -38,6 +41,10 @@ do
 echo "on speaker $i"
 python $benchmark_location/benchmarks/MP3S/$task/$downstream/train.py $benchmark_location/benchmarks/MP3S/$task/$downstream/hparams/ssl_brq.yaml \
     --data_folder /users/rwhetten/IEMOCAP/IEMOCAP_full_release \
-	--num_layers_ssl "$num_layers" --num_encoder_layers "$num_encoder_layers" --ssl_hub "$hub" --encoder_dim "$encoder_dim" --output_folder "$output_folder"/"$task"/"$downstream/$i" \
+	--num_layers_ssl "$num_layers" \
+	--num_encoder_layers "$num_encoder_layers" \
+	--ssl_hub "$hub" \ 
+	--encoder_dim "$encoder_dim" \ 
+	--output_folder "$output_folder"/"$task"/"$downstream/$i" \
 	--test_spk_id=$i
 done

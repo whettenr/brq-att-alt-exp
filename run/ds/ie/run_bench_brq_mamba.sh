@@ -1,10 +1,10 @@
 #!/bin/bash
-#SBATCH --job-name=er_b_mamba   # nom du job
+#SBATCH --job-name=ie_b_mamba   # nom du job
 #SBATCH --account=uul@v100
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=8
 #SBATCH --time=20:00:00          # temps d'exécution maximum demande (HH:MM:SS) 
-#SBATCH --output=brq_cv_%j.log  # log file
+#SBATCH --output=brq_ie_%j.log  # log file
 #SBATCH --array=0-4%1
 
 module purge
@@ -24,34 +24,29 @@ benchmark_location=/gpfswork/rech/uul/ujg45iy/projects/mamba_ssl/benchmarks
 task='IEMOCAP'
 downstream='ecapa_tdnn'
 
-DatasetsFolders=("/gpfsscratch/rech/uul/ujg45iy/cv/cv-corpus-11.0-2022-09-21/$language" "/gpfsscratch/rech/uul/ujg45iy/cv/cv-corpus-11.0-2022-09-21/$language")
-ConsideredTasks=('CommonVoice' 'CommonVoice')
-DownStreams=('LSTM' 'linear')
-
-for i in "${!ConsideredTasks[@]}"; do
-	task=${ConsideredTasks[i]}
-	downstream=${DownStreams[i]}
-	dataset_folder=${DatasetsFolders[i]}
-	python $benchmark_location/benchmarks/MP3S/$task/$downstream/train.py $benchmark_location/benchmarks/MP3S/$task/$downstream/hparams/ssl_brq.yaml \
-		--num_layers_ssl $num_layers \
-        --ssl_hub $hub \
-        --encoder_dim $encoder_dim \
-        --output_folder $output_folder/$task/$language/$downstream \
-        --data_folder $dataset_folder \
-		--language $language 
+for i in {1..10}
+do
+echo "on speaker $i"
+python $benchmark_location/benchmarks/MP3S/$task/$downstream/train.py $benchmark_location/benchmarks/MP3S/$task/$downstream/hparams/ssl_brq.yaml \
+    --data_folder /gpfsscratch/rech/uul/ujg45iy/IEMOCAP/IEMOCAP/IEMOCAP_full_release \
+	--num_layers_ssl "$num_layers" \
+	--ssl_hub "$hub" \
+	--encoder_dim "$encoder_dim" \
+	--output_folder "$output_folder"/"$task"/"$downstream/$i" \
+	--test_spk_id=$i
 done
 
+downstream='linear'
 
-language='eu'
-ConsideredTasks=('CommonVoice' 'CommonVoice')
-DownStreams=('LSTM' 'linear')
-
-for i in "${!ConsideredTasks[@]}"; do
-	task=${ConsideredTasks[i]}
-	downstream=${DownStreams[i]}
-	dataset_folder=${DatasetsFolders[i]}
-	python $benchmark_location/benchmarks/MP3S/$task/$downstream/train.py $benchmark_location/benchmarks/MP3S/$task/$downstream/hparams/ssl_brq.yaml \
-		--num_layers_ssl $num_layers --ssl_hub $hub --encoder_dim $encoder_dim --output_folder $output_folder/$task/$language/$downstream --data_folder $dataset_folder \
-		--language $language 
+for i in {1..10}
+do
+echo "on speaker $i"
+python $benchmark_location/benchmarks/MP3S/$task/$downstream/train.py $benchmark_location/benchmarks/MP3S/$task/$downstream/hparams/ssl_brq.yaml \
+    --data_folder /gpfsscratch/rech/uul/ujg45iy/IEMOCAP/IEMOCAP/IEMOCAP_full_release \
+	--num_layers_ssl "$num_layers" \
+	--ssl_hub "$hub" \
+	--encoder_dim "$encoder_dim" \
+	--output_folder "$output_folder"/"$task"/"$downstream/$i" \
+	--test_spk_id=$i
 done
 

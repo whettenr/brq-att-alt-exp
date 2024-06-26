@@ -10,7 +10,7 @@ seed: 1000
 __set_seed: !apply:torch.manual_seed [!ref <seed>]
 
 project_name: alt-attention
-experiment_name: brq
+experiment_name: brq_summary
 architecture: brq-conformer-summary_mix
 wandb_offline: True
 
@@ -29,9 +29,9 @@ train_stage_log: !ref <output_folder>/train_stage_log.txt
 train_splits: ["train-clean-100", "train-clean-360", "train-other-500"]
 dev_splits: ["dev-clean"]
 test_splits: ["test-clean"]
-train_csv: results/csv/train.csv
-valid_csv: results/csv/dev-clean.csv
-skip_prep: True
+train_csv: !ref <output_folder>/train.csv
+valid_csv: !ref <output_folder>/dev-clean.csv
+skip_prep: False
 
 avoid_if_longer_than: 60.0
 avoid_if_shorter_than: 2.0

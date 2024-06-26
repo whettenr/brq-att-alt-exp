@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=ls_blg   # nom du job
+#SBATCH --job-name=ls_brq_lg_mamba   # nom du job
 #SBATCH --account=dha@v100
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=8
@@ -19,6 +19,7 @@ encoder_dim='848'
 output_folder='results/MP3/brq_lg'
 csv_location=/gpfswork/rech/nkp/uaj64gk/attention_alt/brq-att-alt-exp/results/MP3S
 benchmark_location=/gpfswork/rech/nkp/uaj64gk/attention_alt/benchmarks
+ngram='/gpfsscratch/rech/uul/ujg45iy/ngram/ls/4-gram.arpa'
 
 DatasetsFolders=('/corpus/LibriSpeech/' '/corpus/LibriSpeech/')
 ConsideredTasks=('LibriSpeech' 'LibriSpeech')
@@ -29,12 +30,11 @@ for i in "${!ConsideredTasks[@]}"; do
 	downstream=${DownStreams[i]}
 	dataset_folder=${DatasetsFolders[i]}
 	python $benchmark_location/benchmarks/MP3S/$task/$downstream/train.py $benchmark_location/benchmarks/MP3S/$task/$downstream/hparams/ssl_brq.yaml \
-		--num_layers_ssl $num_layers --num_encoder_layers $num_encoder_layers --ssl_hub $hub --encoder_dim $encoder_dim \
+		--num_layers_ssl $num_layers --num_encoder_layers $num_encoder_layers --ssl_hub $hub --encoder_dim $encoder_dim 
 		--output_folder $output_folder/$task/$downstream --data_folder $dataset_folder \
-		--csv_location $csv_location
 	
 	python $benchmark_location/benchmarks/MP3S/$task/$downstream/train.py $benchmark_location/benchmarks/MP3S/$task/$downstream/hparams/ssl_brq.yaml \
 		--num_layers_ssl $num_layers --num_encoder_layers $num_encoder_layers --ssl_hub $hub --encoder_dim $encoder_dim \
 		--output_folder $output_folder/$task/$downstream --data_folder $dataset_folder --test_only --language_modelling True \
-		--csv_location $csv_location
+    	--ngram_lm_path $ngram 
 done

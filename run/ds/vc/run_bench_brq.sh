@@ -27,7 +27,12 @@ for i in "${!ConsideredTasks[@]}"; do
 	downstream=${DownStreams[i]}
 	dataset_folder=${DatasetsFolders[i]}
 	python $benchmark_location/benchmarks/MP3S/$task/$downstream/train.py $benchmark_location/benchmarks/MP3S/$task/$downstream/hparams/ssl_brq.yaml \
-		--num_layers_ssl $num_layers --ssl_hub $hub --encoder_dim $encoder_dim --output_folder $output_folder/$task/$downstream --data_folder $dataset_folder --debug \
+		--num_layers_ssl $num_layers 
+		--ssl_hub $hub 
+		--encoder_dim $encoder_dim 
+		--output_folder $output_folder/$task/$downstream 
+		--data_folder $dataset_folder 
+		--debug \
 		--csv_location $csv_location \
 done
 

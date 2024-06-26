@@ -5,7 +5,7 @@
 #SBATCH --cpus-per-task=8
 #SBATCH --time=20:00:00          # temps d'exécution maximum demande (HH:MM:SS) 
 #SBATCH --output=brq_lg_cv_%j.log  # log file
-#SBATCH --array=0-2%1
+#SBATCH --array=0-5%1
 
 module purge
 module load cpuarch/amd
@@ -16,8 +16,9 @@ conda activate mamba_ssl
 
 cd /gpfswork/rech/uul/ujg45iy/projects/mamba_ssl/brq-att-alt-exp
 hub=/gpfsscratch/rech/uul/ujg45iy/brq_mamba_bidirectional_lg/save/CKPT+2024-06-09+18-01-16+00
-num_layers=24
-encoder_dim=848
+num_layers=25
+num_encoder_layers=24
+encoder_dim=678
 output_folder='/gpfsscratch/rech/uul/ujg45iy/FT/CV/brq_mamba_bidir_lg'
 benchmark_location=/gpfswork/rech/uul/ujg45iy/projects/mamba_ssl/benchmarks
 language='cy'
@@ -44,6 +45,7 @@ done
 language='eu'
 ConsideredTasks=('CommonVoice' 'CommonVoice')
 DownStreams=('LSTM' 'linear')
+DatasetsFolders=("/gpfsscratch/rech/uul/ujg45iy/cv/cv-corpus-11.0-2022-09-21/$language" "/gpfsscratch/rech/uul/ujg45iy/cv/cv-corpus-11.0-2022-09-21/$language")
 
 for i in "${!ConsideredTasks[@]}"; do
 	task=${ConsideredTasks[i]}

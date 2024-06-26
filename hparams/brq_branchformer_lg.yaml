@@ -15,7 +15,7 @@ experiment_name: bf_lg
 architecture: brq-branchformer
 wandb_offline: True
 
-data_folder: /gpfsscratch/rech/nkp/uaj64gk/corpus/LibriSpeech/
+data_folder: /gpfsdswork/dataset/LibriSpeechAsrCorpus
 output_folder: !ref results/bf_lg/<seed>
 output_wer_folder: !ref <output_folder>/
 sim_test_time: 10
@@ -31,9 +31,9 @@ train_stage_log: !ref <output_folder>/train_stage_log.txt
 train_splits: ["train-clean-100", "train-clean-360", "train-other-500"]
 dev_splits: ["dev-clean"]
 test_splits: ["test-clean"]
-train_csv: results/csv/train.csv
-valid_csv: results/csv/dev-clean.csv
-skip_prep: True
+train_csv: !ref <output_folder>/train.csv
+valid_csv: !ref <output_folder>/dev-clean.csv
+skip_prep: False
 
 avoid_if_longer_than: 60.0
 avoid_if_shorter_than: 2.0
